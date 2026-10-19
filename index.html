@@ -1,154 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VibeNet - Connect, Create & Earn</title>
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #000; color: #fff; margin: 0; padding-bottom: 70px; }
-        header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #262626; position: sticky; top: 0; background: #000; z-index: 100; }
-        .logo { font-size: 24px; font-weight: bold; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .feed { max-width: 470px; margin: 0 auto; }
-        .post { border-bottom: 1px solid #262626; padding-bottom: 12px; margin-bottom: 12px; }
-        .post-header { display: flex; justify-content: space-between; align-items: center; padding: 10px; }
-        .user-info { display: flex; align-items: center; gap: 8px; font-weight: 600; }
-        .verified-badge { color: #1DA1F2; font-size: 14px; }
-        .post-img { width: 100%; max-height: 450px; object-fit: cover; }
-        .actions { padding: 10px; display: flex; gap: 16px; font-size: 20px; cursor: pointer; }
-        .likes-count { padding: 0 10px; font-weight: 600; font-size: 14px; }
-        .caption { padding: 5px 10px; font-size: 14px; }
-        .ad-banner { background: #1a1a1a; border: 1px solid #333; border-radius: 8px; margin: 12px; padding: 12px; text-align: center; }
-        .ad-title { font-size: 12px; color: #8e8e8e; text-transform: uppercase; letter-spacing: 1px; }
-        .ad-btn { background: #0095f6; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; font-weight: 600; margin-top: 8px; cursor: pointer; }
-        nav { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid #262626; display: flex; justify-content: space-around; padding: 12px 0; font-size: 22px; }
-        .nav-item { cursor: pointer; text-decoration: none; color: #fff; }
-        .btn { background: #0095f6; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: 600; }
-        .card { background: #121212; padding: 16px; border-radius: 8px; margin: 12px; border: 1px solid #262626; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeNet</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #000; color: #fff; padding-bottom: 65px; }
+
+    /* Top Bar */
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 16px; border-bottom: 1px solid #262626; position: sticky; top: 0; background: #000; z-index: 100;
+    }
+    .logo { font-size: 22px; font-weight: bold; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header-icons { display: flex; gap: 16px; font-size: 20px; align-items: center; }
+
+    /* Tab Content Controls */
+    .tab-page { display: none; }
+    .tab-page.active { display: block; }
+
+    /* Stories Bar */
+    .stories-container { display: flex; gap: 14px; padding: 12px 16px; overflow-x: auto; border-bottom: 1px solid #262626; }
+    .story { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; }
+    .story-ring { width: 62px; height: 62px; border-radius: 50%; padding: 2px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+    .story-img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid #000; background: #333; }
+
+    /* Post Card */
+    .post { border-bottom: 1px solid #1c1c1e; padding-bottom: 12px; margin-bottom: 10px; }
+    .post-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; }
+    .post-user { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 14px; }
+    .post-avatar { width: 32px; height: 32px; border-radius: 50%; background: #555; }
+    .post-media { width: 100%; height: 380px; background: #1c1c1e; display: flex; align-items: center; justify-content: center; color: #8e8e93; }
+    .post-actions { display: flex; justify-content: space-between; padding: 10px 16px; font-size: 20px; }
+    .post-likes { padding: 0 16px; font-weight: 600; font-size: 13px; }
+
+    /* Reels View */
+    .reel-card { height: calc(100vh - 125px); background: #121212; position: relative; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #262626; }
+    .reel-sidebar { position: absolute; right: 12px; bottom: 80px; display: flex; flex-direction: column; gap: 18px; align-items: center; font-size: 12px; }
+    .reel-user { position: absolute; left: 16px; bottom: 20px; display: flex; flex-direction: column; gap: 6px; }
+
+    /* Profile View */
+    .profile-header { padding: 16px; }
+    .profile-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .profile-dp { width: 75px; height: 75px; border-radius: 50%; background: #333; }
+    .profile-stats { display: flex; gap: 20px; text-align: center; }
+    .stat-num { font-weight: bold; font-size: 16px; }
+    .stat-label { font-size: 12px; color: #8e8e93; }
+    .profile-actions { display: flex; gap: 8px; margin-top: 14px; }
+    .btn-secondary { flex: 1; background: #1c1c1e; color: #fff; border: 1px solid #333; padding: 8px; border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center; }
+
+    /* Monetization Dashboard */
+    .earning-card { background: linear-gradient(135deg, #1c1c1e, #2c2c2e); border: 1px solid #3a3a3c; border-radius: 12px; padding: 16px; margin: 16px; }
+    .earning-title { font-size: 18px; font-weight: bold; margin-bottom: 8px; color: #30d158; }
+    .monetize-option { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #262626; }
+
+    /* Bottom Navigation */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 55px; background: #000; border-top: 1px solid #262626; display: flex; justify-content: space-around; align-items: center; z-index: 100; }
+    .nav-btn { background: none; border: none; color: #8e8e93; font-size: 22px; }
+    .nav-btn.active { color: #fff; }
+  </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">VibeNet</div>
-        <div>
-            <span onclick="buyBlueTick()" style="cursor:pointer; font-size: 14px; background: #1a1a1a; padding: 6px 10px; border-radius: 20px; border: 1px solid #333;">Get ✔️ Blue Tick (₹99)</span>
-        </div>
-    </header>
+  <!-- Top Bar -->
+  <header>
+    <div class="logo">VibeNet</div>
+    <div class="header-icons">
+      <span>💙</span>
+      <span>💬</span>
+    </div>
+  </header>
 
-    <div id="app">
-        <!-- Feed View -->
-        <div id="home-tab" class="feed">
-            <div id="feed-container"></div>
-        </div>
-
-        <!-- Monetization Dashboard View -->
-        <div id="wallet-tab" style="display:none;" class="feed">
-            <div class="card">
-                <h2>💵 VibeNet Creator Earnings</h2>
-                <p>Total Views: <strong id="total-views">0</strong></p>
-                <p>Creator Balance: <strong id="user-balance">₹0.00</strong></p>
-                <hr style="border-color:#262626;">
-                <p>Admin Ad Earnings: <strong id="admin-ad-earnings">₹0.00</strong></p>
-                <button class="btn" onclick="withdrawEarnings()">Withdraw Payout (UPI/Bank)</button>
-            </div>
-        </div>
+  <!-- TAB 1: HOME FEED -->
+  <div id="home-tab" class="tab-page active">
+    <div class="stories-container">
+      <div class="story"><div class="story-ring"><div class="story-img"></div></div><span>Your Story</span></div>
+      <div class="story"><div class="story-ring"><div class="story-img"></div></div><span>rahul_vibe</span></div>
+      <div class="story"><div class="story-ring"><div class="story-img"></div></div><span>priya_art</span></div>
+      <div class="story"><div class="story-ring"><div class="story-img"></div></div><span>sam_tech</span></div>
     </div>
 
-    <nav>
-        <span class="nav-item" onclick="switchTab('home')">🏠</span>
-        <span class="nav-item" onclick="switchTab('create')">➕</span>
-        <span class="nav-item" onclick="switchTab('wallet')">💵</span>
-    </nav>
+    <div class="post">
+      <div class="post-header">
+        <div class="post-user"><div class="post-avatar"></div> priya_art ✔️</div>
+        <div>•••</div>
+      </div>
+      <div class="post-media">📷 Post Preview Media</div>
+      <div class="post-actions">
+        <div>❤️ 💬 ✈️</div>
+        <div>🔖</div>
+      </div>
+      <div class="post-likes">1,240 likes</div>
+    </div>
+  </div>
 
-    <script>
-        let currentUser = "demo_creator";
+  <!-- TAB 2: REELS -->
+  <div id="reels-tab" class="tab-page">
+    <div class="reel-card">
+      <div>🎬 Full Screen Reel Video</div>
+      <div class="reel-sidebar">
+        <div>❤️<br><span style="font-size:10px">12.5k</span></div>
+        <div>💬<br><span style="font-size:10px">430</span></div>
+        <div>✈️<br><span style="font-size:10px">Share</span></div>
+      </div>
+      <div class="reel-user">
+        <strong style="font-size: 14px;">@mr_s____1 ✔️</strong>
+        <span style="font-size: 12px; color: #ccc;">Original Audio - VibeNet Trends</span>
+      </div>
+    </div>
+  </div>
 
-        async function loadFeed() {
-            const res = await fetch('/api/feed/' + currentUser);
-            const data = await res.json();
-            const container = document.getElementById('feed-container');
-            container.innerHTML = '';
+  <!-- TAB 3: EARNING & MONETIZATION HUB -->
+  <div id="earning-tab" class="tab-page">
+    <div class="earning-card">
+      <div class="earning-title">💰 Monetization Dashboard</div>
+      <p style="font-size: 13px; color: #8e8e93;">Manage your earnings and premium subscriptions.</p>
+      <div style="font-size: 28px; font-weight: bold; margin-top: 12px;">₹0.00 <span style="font-size: 12px; color: #30d158;">Total Earnings</span></div>
+    </div>
 
-            // Show Sponsored Ad
-            if(data.ad) {
-                container.innerHTML += `
-                    <div class="ad-banner">
-                        <div class="ad-title">Sponsored Ad</div>
-                        <h4 style="margin:6px 0;">${data.ad.title}</h4>
-                        <p style="font-size:13px; color:#ccc; margin:0;">${data.ad.content}</p>
-                        <button class="ad-btn" onclick="clickAd()">${data.ad.cta}</button>
-                    </div>
-                `;
-            }
+    <div style="padding: 0 16px;">
+      <div class="monetize-option">
+        <div>
+          <strong>Verified Blue Tick</strong>
+          <div style="font-size: 12px; color: #8e8e93;">Get official badge & priority boost</div>
+        </div>
+        <button class="btn-secondary" style="background: #007aff; color: #fff; border: none;">₹99/mo</button>
+      </div>
 
-            data.posts.forEach(post => {
-                container.innerHTML += `
-                    <div class="post">
-                        <div class="post-header">
-                            <div class="user-info">
-                                @${post.username} ${post.verified ? '<span class="verified-badge">✔</span>' : ''}
-                            </div>
-                        </div>
-                        ${post.mediaUrl ? `<img src="${post.mediaUrl}" class="post-img">` : ''}
-                        <div class="actions">
-                            <span onclick="likePost(${post.id})">❤️</span>
-                            <span>💬</span>
-                        </div>
-                        <div class="likes-count">${post.likes} likes</div>
-                        <div class="caption"><strong>@${post.username}</strong> ${post.caption}</div>
-                    </div>
-                `;
-            });
-        }
+      <div class="monetize-option">
+        <div>
+          <strong>Creator Ad Revenue</strong>
+          <div style="font-size: 12px; color: #8e8e93;">Earn money from ads shown on Reels</div>
+        </div>
+        <button class="btn-secondary">Apply</button>
+      </div>
 
-        async function clickAd() {
-            await fetch('/api/click-ad', { method: 'POST' });
-            alert("Ad clicked! Earnings updated in Admin Wallet.");
-            loadDashboard();
-        }
+      <div class="monetize-option">
+        <div>
+          <strong>Post & Profile Boost</strong>
+          <div style="font-size: 12px; color: #8e8e93;">Reach 10,000+ targeted users</div>
+        </div>
+        <button class="btn-secondary">Promote</button>
+      </div>
+    </div>
+  </div>
 
-        async function buyBlueTick() {
-            if(confirm("Purchase VibeNet Verified Blue Tick for ₹99?")) {
-                const res = await fetch('/api/buy-bluetick', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ username: currentUser })
-                });
-                const data = await res.json();
-                alert(data.message);
-                loadFeed();
-            }
-        }
+  <!-- TAB 4: PROFILE -->
+  <div id="profile-tab" class="tab-page">
+    <div class="profile-header">
+      <div class="profile-top">
+        <div class="profile-dp"></div>
+        <div class="profile-stats">
+          <div><div class="stat-num">0</div><div class="stat-label">Posts</div></div>
+          <div><div class="stat-num">1</div><div class="stat-label">Followers</div></div>
+          <div><div class="stat-num">2</div><div class="stat-label">Following</div></div>
+        </div>
+      </div>
+      <div>
+        <strong style="font-size: 15px;">mr_s____1</strong>
+        <p style="font-size: 13px; color: #ccc; margin-top: 2px;">Welcome to my VibeNet official profile! 🚀</p>
+      </div>
+      <div class="profile-actions">
+        <div class="btn-secondary">Edit profile</div>
+        <div class="btn-secondary">Share profile</div>
+      </div>
+    </div>
+    <div style="text-align: center; padding: 40px 0; color: #8e8e93; border-top: 1px solid #262626;">
+      <p style="font-size: 18px; font-weight: bold; color: #fff;">Create your first post</p>
+      <p style="font-size: 13px; margin-top: 4px;">Make this space your own.</p>
+    </div>
+  </div>
 
-        async function loadDashboard() {
-            const res = await fetch('/api/profile/' + currentUser);
-            const data = await res.json();
-            document.getElementById('total-views').innerText = data.profile.totalViews || 0;
-            document.getElementById('user-balance').innerText = '₹' + (data.profile.balance * 80).toFixed(2);
-            document.getElementById('admin-ad-earnings').innerText = '₹' + (data.adEarnings * 80).toFixed(2);
-        }
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="switchTab('home-tab', this)">🏠</button>
+    <button class="nav-btn" onclick="switchTab('reels-tab', this)">🎬</button>
+    <button class="nav-btn" onclick="switchTab('earning-tab', this)">💵</button>
+    <button class="nav-btn" onclick="switchTab('profile-tab', this)">👤</button>
+  </nav>
 
-        function switchTab(tab) {
-            document.getElementById('home-tab').style.display = tab === 'home' ? 'block' : 'none';
-            document.getElementById('wallet-tab').style.display = tab === 'wallet' ? 'block' : 'none';
-            if(tab === 'wallet') loadDashboard();
-        }
-
-        async function withdrawEarnings() {
-            const amount = prompt("Enter amount to withdraw in INR (₹):");
-            if(amount) {
-                const res = await fetch('/api/withdraw', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ username: currentUser, amount: parseFloat(amount)/80 })
-                });
-                const data = await res.json();
-                alert(data.message);
-                loadDashboard();
-            }
-        }
-
-        loadFeed();
-    </script>
+  <script>
+    function switchTab(tabId, btnElement) {
+      document.querySelectorAll('.tab-page').forEach(page => page.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      btnElement.classList.add('active');
+    }
+  </script>
 </body>
 </html>
