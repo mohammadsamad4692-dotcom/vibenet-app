@@ -6,7 +6,7 @@
   <title>VibeNet</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #000; color: #fff; padding-bottom: 65px; }
+    body { background-color: #000; color: #fff; padding-bottom: 90px; }
 
     /* Top Bar */
     header {
@@ -27,23 +27,24 @@
     .story-img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid #000; background: #333; }
 
     /* Post Card */
-    .post { border-bottom: 1px solid #1c1c1e; margin-bottom: 12px; }
+    .post { border-bottom: 1px solid #1c1c1e; margin-bottom: 12px; background: #000; }
     .post-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; font-size: 14px; font-weight: 600; }
     .post-avatar { width: 30px; height: 30px; border-radius: 50%; background: #555; display: inline-block; vertical-align: middle; margin-right: 8px; }
-    .post-media { width: 100%; height: 380px; background: #121212; display: flex; align-items: center; justify-content: center; color: #8e8e93; font-size: 15px; }
+    .post-media { width: 100%; max-height: 400px; background: #121212; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .post-media img, .post-media video { width: 100%; height: auto; object-fit: cover; }
     .post-actions { display: flex; justify-content: space-between; padding: 10px 16px; font-size: 22px; }
     .post-likes { padding: 0 16px 4px; font-weight: 600; font-size: 13px; }
     .post-caption { padding: 0 16px 10px; font-size: 13px; color: #ddd; }
 
     /* Reels View */
-    .reel-card { height: calc(100vh - 115px); background: #111; position: relative; display: flex; align-items: center; justify-content: center; color: #ccc; }
+    .reel-card { height: calc(100vh - 130px); background: #111; position: relative; display: flex; align-items: center; justify-content: center; color: #ccc; }
     .reel-sidebar { position: absolute; right: 14px; bottom: 80px; display: flex; flex-direction: column; gap: 20px; align-items: center; font-size: 13px; cursor: pointer; }
     .reel-info { position: absolute; left: 16px; bottom: 20px; display: flex; flex-direction: column; gap: 6px; }
 
     /* Upload Page */
     .upload-container { padding: 20px; text-align: center; }
-    .upload-box { border: 2px dashed #444; border-radius: 12px; padding: 40px 20px; margin-top: 20px; background: #121212; color: #aaa; }
-    .action-btn { background: #0095f6; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; margin-top: 15px; cursor: pointer; font-size: 14px; }
+    .upload-box { border: 2px dashed #444; border-radius: 12px; padding: 25px 15px; margin-top: 15px; background: #121212; color: #aaa; cursor: pointer; }
+    .action-btn { background: #0095f6; color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; margin-top: 15px; cursor: pointer; font-size: 14px; width: 100%; }
 
     /* Profile View */
     .profile-header { padding: 16px; }
@@ -60,9 +61,9 @@
     .chat-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #1c1c1e; cursor: pointer; }
     .chat-avatar { width: 45px; height: 45px; border-radius: 50%; background: #444; }
 
-    /* Bottom Navigation */
-    .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 55px; background: #000; border-top: 1px solid #262626; display: flex; justify-content: space-around; align-items: center; z-index: 100; }
-    .nav-btn { background: none; border: none; color: #8e8e93; font-size: 24px; cursor: pointer; }
+    /* Bottom Navigation - Perfectly positioned higher up */
+    .bottom-nav { position: fixed; bottom: 20px; left: 16px; right: 16px; height: 58px; background: #111; border: 1px solid #333; border-radius: 29px; display: flex; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 6px 20px rgba(0,0,0,0.8); }
+    .nav-btn { background: none; border: none; color: #8e8e93; font-size: 22px; cursor: pointer; padding: 10px; }
     .nav-btn.active { color: #fff; }
   </style>
 </head>
@@ -85,22 +86,26 @@
       <div class="story" onclick="alert('Viewing sam_vibe story')"><div class="story-ring"><div class="story-img"></div></div><span>sam_vibe</span></div>
     </div>
 
-    <div class="post">
-      <div class="post-header">
-        <div><div class="post-avatar"></div> priya_art <span style="color:#0095f6">✔️</span></div>
-        <div onclick="alert('Options: Delete Post / Report')" style="cursor:pointer">•••</div>
-      </div>
-      <div class="post-media">📷 Post Image / Video Content</div>
-      <div class="post-actions">
-        <div>
-          <span onclick="alert('Liked!')" style="cursor:pointer">❤️</span> 
-          <span onclick="alert('Open Comments Box')" style="cursor:pointer; margin-left:12px;">💬</span> 
-          <span onclick="alert('Share Post Link')" style="cursor:pointer; margin-left:12px;">✈️</span>
+    <div id="feedContainer">
+      <div class="post" id="default-post">
+        <div class="post-header">
+          <div><div class="post-avatar"></div> priya_art <span style="color:#0095f6">✔️</span></div>
+          <div onclick="this.closest('.post').remove()" style="cursor:pointer; color:#ff453a;" title="Delete Post">🗑️</div>
         </div>
-        <div><span onclick="alert('Post Saved!')" style="cursor:pointer">🔖</span></div>
+        <div class="post-media">
+          <div style="color: #8e8e93; padding: 40px;">📷 Sample Post Content</div>
+        </div>
+        <div class="post-actions">
+          <div>
+            <span onclick="alert('Liked!')" style="cursor:pointer">❤️</span> 
+            <span onclick="alert('Open Comments Box')" style="cursor:pointer; margin-left:12px;">💬</span> 
+            <span onclick="alert('Share Post Link')" style="cursor:pointer; margin-left:12px;">✈️</span>
+          </div>
+          <div><span onclick="alert('Post Saved!')" style="cursor:pointer">🔖</span></div>
+        </div>
+        <div class="post-likes">1,450 likes</div>
+        <div class="post-caption"><b>priya_art</b> Enjoying the vibes on VibeNet! 🚀 #vibenet #creator</div>
       </div>
-      <div class="post-likes">1,450 likes</div>
-      <div class="post-caption"><b>priya_art</b> Enjoying the vibes on VibeNet! 🚀 #vibenet #creator</div>
     </div>
   </div>
 
@@ -125,10 +130,17 @@
     <div class="upload-container">
       <h2 style="margin-bottom: 5px;">Create New Post / Reel</h2>
       <p style="font-size: 13px; color: #8e8e93;">Share your moments with VibeNet community</p>
-      <div class="upload-box" onclick="alert('Select Media from Gallery')">
-        📁 Tap to Upload Photo, Reel or Story
+      
+      <input type="file" id="mediaFile" accept="image/*,video/*" style="display: none;" onchange="previewMedia(event)">
+      
+      <div class="upload-box" onclick="document.getElementById('mediaFile').click()">
+        <div id="previewText">📁 Tap to Select Photo or Video</div>
+        <div id="mediaPreviewContainer" style="display: none; margin-top: 10px;"></div>
       </div>
-      <button class="action-btn" onclick="alert('Published Successfully!')">Publish to VibeNet</button>
+
+      <input type="text" id="captionInput" placeholder="Write a caption..." style="width: 100%; padding: 12px; margin-top: 15px; background: #1c1c1e; border: 1px solid #333; color: #fff; border-radius: 8px;">
+
+      <button type="button" class="action-btn" onclick="uploadPost()">Publish to VibeNet</button>
     </div>
   </div>
 
@@ -145,7 +157,7 @@
           <strong>Verified Blue Tick</strong>
           <div style="font-size: 12px; color: #8e8e93;">Get official badge for ₹99/mo</div>
         </div>
-        <button class="action-btn" style="margin:0; padding: 6px 14px;" onclick="alert('Redirecting to Payment Gateway for ₹99 Blue Tick...')">Buy</button>
+        <button class="action-btn" style="width: auto; margin:0; padding: 8px 14px;" onclick="alert('Redirecting to Payment Gateway for ₹99 Blue Tick...')">Buy</button>
       </div>
 
       <div style="background: #121212; border-radius: 10px; padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
@@ -153,13 +165,13 @@
           <strong>Creator Payout</strong>
           <div style="font-size: 12px; color: #8e8e93;">Withdraw balance to UPI/Bank</div>
         </div>
-        <button class="action-btn" style="margin:0; padding: 6px 14px; background:#333;" onclick="alert('Withdrawal request submitted!')">Withdraw</button>
+        <button class="action-btn" style="width: auto; margin:0; padding: 8px 14px; background:#333;" onclick="alert('Withdrawal request of ₹44 submitted successfully! Amount will be credited to your UPI/Bank within 24 hours.')">Withdraw</button>
       </div>
 
       <!-- Account Settings & Logout -->
       <div style="margin-top: 25px; border-top: 1px solid #262626; padding-top: 15px;">
         <div style="font-weight: bold; margin-bottom: 12px; color: #ff453a;">Account Settings</div>
-        <button class="action-btn" style="width: 100%; background: #ff3b30;" onclick="alert('Logged out successfully! Redirecting to login page...')">Log Out</button>
+        <button class="action-btn" style="background: #ff3b30;" onclick="alert('Logged out successfully! Redirecting to login page...')">Log Out</button>
       </div>
     </div>
   </div>
@@ -170,7 +182,7 @@
       <div class="profile-info">
         <div class="profile-dp"></div>
         <div class="profile-stats">
-          <div><div class="stat-val">0</div><div class="stat-lbl">Posts</div></div>
+          <div><div class="stat-val" id="postCount">1</div><div class="stat-lbl">Posts</div></div>
           <div><div class="stat-val">1</div><div class="stat-lbl">Followers</div></div>
           <div><div class="stat-val">2</div><div class="stat-lbl">Following</div></div>
         </div>
@@ -185,8 +197,8 @@
       </div>
     </div>
     <div style="text-align: center; padding: 40px 0; border-top: 1px solid #262626; color: #8e8e93;">
-      <p style="font-size: 18px; font-weight: bold; color: #fff;">Create your first post</p>
-      <p style="font-size: 13px; margin-top: 4px;">Make this space your own.</p>
+      <p style="font-size: 18px; font-weight: bold; color: #fff;">Your VibeNet Feed</p>
+      <p style="font-size: 13px; margin-top: 4px;">All your uploads will appear here and on home feed.</p>
     </div>
   </div>
 
@@ -222,12 +234,82 @@
   </nav>
 
   <script>
+    let selectedFileUrl = null;
+    let fileType = null;
+
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(b => { if(b) b.classList.remove('active'); });
       document.getElementById(tabId).classList.add('active');
       if(btn && btn.classList) btn.classList.add('active');
     }
+
+    function previewMedia(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      selectedFileUrl = URL.createObjectURL(file);
+      fileType = file.type;
+      
+      const container = document.getElementById('mediaPreviewContainer');
+      const textElem = document.getElementById('previewText');
+      
+      container.style.display = 'block';
+      textElem.style.display = 'none';
+      
+      if (fileType.startsWith('video/')) {
+        container.innerHTML = `<video src="${selectedFileUrl}" style="max-width:100%; max-height:180px; border-radius:8px;" controls></video>`;
+      } else {
+        container.innerHTML = `<img src="${selectedFileUrl}" style="max-width:100%; max-height:180px; border-radius:8px;">`;
+      }
+    }
+
+    function uploadPost() {
+      const caption = document.getElementById('captionInput').value;
+      if (!selectedFileUrl) {
+        alert('Pehle koi photo ya video select karein!');
+        return;
+      }
+
+      const feed = document.getElementById('feedContainer');
+      const newPost = document.createElement('div');
+      newPost.className = 'post';
+      
+      let mediaHtml = fileType.startsWith('video/') ? 
+        `<video src="${selectedFileUrl}" controls style="width:100%; max-height:400px; object-fit:cover;"></video>` : 
+        `<img src="${selectedFileUrl}" style="width:100%; max-height:400px; object-fit:cover;">`;
+
+      newPost.innerHTML = `
+        <div class="post-header">
+          <div><div class="post-avatar"></div> mr_s____1 <span style="color:#0095f6">✔️</span></div>
+          <div onclick="this.closest('.post').remove()" style="cursor:pointer; color:#ff453a;" title="Delete Post">🗑️</div>
+        </div>
+        <div class="post-media">${mediaHtml}</div>
+        <div class="post-actions">
+          <div>
+            <span onclick="alert('Liked!')" style="cursor:pointer">❤️</span> 
+            <span onclick="alert('Comments')" style="cursor:pointer; margin-left:12px;">💬</span> 
+            <span onclick="alert('Shared')" style="cursor:pointer; margin-left:12px;">✈️</span>
+          </div>
+          <div><span onclick="alert('Saved')" style="cursor:pointer">🔖</span></div>
+        </div>
+        <div class="post-likes">0 likes</div>
+        <div class="post-caption"><b>mr_s____1</b> ${caption || ''}</div>
+      `;
+
+      feed.prepend(newPost);
+      alert('Aapka post successfully publish ho gaya hai!');
+      
+      // Reset form
+      document.getElementById('captionInput').value = '';
+      document.getElementById('mediaPreviewContainer').innerHTML = '';
+      document.getElementById('mediaPreviewContainer').style.display = 'none';
+      document.getElementById('previewText').style.display = 'block';
+      selectedFileUrl = null;
+
+      switchTab('home-tab', document.querySelectorAll('.nav-btn')[0]);
+    }
   </script>
 </body>
-</html>
+                                 </html>
+                                 
