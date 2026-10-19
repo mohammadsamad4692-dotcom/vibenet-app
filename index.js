@@ -9,15 +9,9 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => {
         cb(null, Date.now() + path.extname(file.originalname));
     }
-});
-<<<<<<< HEAD
-app.get('/', (req, res) => {
+});app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
-
-=======
->>>>>>> 4659154d321da7ef429cf9bd6154e7b99f153213
-
 const upload = multer({ storage: storage });
 
 app.use(express.json());
