@@ -29,7 +29,7 @@
     /* Post Card */
     .post { border-bottom: 1px solid #1c1c1e; margin-bottom: 12px; background: #000; }
     .post-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; font-size: 14px; font-weight: 600; }
-    .post-avatar { width: 30px; height: 30px; border-radius: 50%; background: #555; display: inline-block; vertical-align: middle; margin-right: 8px; }
+    .post-avatar { width: 30px; height: 30px; border-radius: 50%; background: #555; display: inline-block; vertical-align: middle; margin-right: 8px; background-size: cover; background-position: center; }
     .post-media { width: 100%; max-height: 400px; background: #121212; display: flex; align-items: center; justify-content: center; overflow: hidden; }
     .post-media img, .post-media video { width: 100%; height: auto; object-fit: cover; }
     .post-actions { display: flex; justify-content: space-between; padding: 10px 16px; font-size: 22px; }
@@ -49,7 +49,7 @@
     /* Profile View */
     .profile-header { padding: 16px; }
     .profile-info { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-    .profile-dp { width: 75px; height: 75px; border-radius: 50%; background: #333; }
+    .profile-dp { width: 75px; height: 75px; border-radius: 50%; background: #333; background-size: cover; background-position: center; cursor: pointer; border: 2px solid #555; }
     .profile-stats { display: flex; gap: 20px; text-align: center; }
     .stat-val { font-weight: bold; font-size: 16px; }
     .stat-lbl { font-size: 12px; color: #8e8e93; }
@@ -184,7 +184,8 @@
   <div id="profile-tab" class="tab-page">
     <div class="profile-header">
       <div class="profile-info">
-        <div class="profile-dp"></div>
+        <input type="file" id="dpFile" accept="image/*" style="display: none;" onchange="updateProfileDp(event)">
+        <div class="profile-dp" id="profileDpImg" onclick="document.getElementById('dpFile').click()" title="Tap to change DP"></div>
         <div class="profile-stats">
           <div><div class="stat-val" id="postCount">1</div><div class="stat-lbl">Posts</div></div>
           <div><div class="stat-val">1</div><div class="stat-lbl">Followers</div></div>
@@ -250,14 +251,38 @@
   <script>
     let selectedFileUrl = null;
     let fileType = null;
-    let currentUsername = "mr_s____1";
-    let currentBio = "Welcome to my VibeNet official profile! 🚀";
+    let currentUsername = localStorage.getItem('vibenet_user') || "mr_s____1";
+    let currentBio = localStorage.getItem('vibenet_bio') || "Welcome to my VibeNet official profile! 🚀";
+    let currentDp = localStorage.getItem('vibenet_dp') || "";
+
+    // Load saved data on start
+    window.onload = function() {
+      document.getElementById('displayUsername').innerHTML = `${currentUsername} <span style="color:#0095f6">✔️</span>`;
+      document.getElementById('displayBio').innerText = currentBio;
+      document.getElementById('reelUsername').innerHTML = `@${currentUsername} <span style="color:#0095f6">✔️</span>`;
+      if(currentDp) {
+        document.getElementById('profileDpImg').style.backgroundImage = `url(${currentDp})`;
+      }
+    };
 
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(b => { if(b) b.classList.remove('active'); });
       document.getElementById(tabId).classList.add('active');
       if(btn && btn.classList) btn.classList.add('active');
+    }
+
+    function updateProfileDp(event) {
+      const file = event.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        currentDp = e.target.result;
+        localStorage.setItem('vibenet_dp', currentDp);
+        document.getElementById('profileDpImg').style.backgroundImage = `url(${currentDp})`;
+        alert('Profile picture updated successfully!');
+      };
+      reader.readAsDataURL(file);
     }
 
     function openEditProfile() {
@@ -275,6 +300,9 @@
       const newB = document.getElementById('editBio').value.trim();
       if(newU) currentUsername = newU;
       if(newB) currentBio = newB;
+
+      localStorage.setItem('vibenet_user', currentUsername);
+      localStorage.setItem('vibenet_bio', currentBio);
 
       document.getElementById('displayUsername').innerHTML = `${currentUsername} <span style="color:#0095f6">✔️</span>`;
       document.getElementById('displayBio').innerText = currentBio;
@@ -332,37 +360,14 @@
         `<video src="${selectedFileUrl}" controls style="width:100%; max-height:400px; object-fit:cover;"></video>` : 
         `<img src="${selectedFileUrl}" style="width:100%; max-height:400px; object-fit:cover;">`;
 
+      let dpStyle = currentDp ? `background-image: url(${currentDp}); background-size: cover; background-position: center;` : '';
+
       newPost.innerHTML = `
         <div class="post-header">
-          <div><div class="post-avatar"></div> ${currentUsername} <span style="color:#0095f6">✔️</span></div>
+          <div><div class="post-avatar" style="${dpStyle}"></div> ${currentUsername} <span style="color:#0095f6">✔️</span></div>
           <div onclick="this.closest('.post').remove()" style="cursor:pointer; color:#ff453a;" title="Delete Post">🗑️</div>
         </div>
         <div class="post-media">${mediaHtml}</div>
         <div class="post-actions">
           <div>
-            <span onclick="alert('Liked!')" style="cursor:pointer">❤️</span> 
-            <span onclick="alert('Comments')" style="cursor:pointer; margin-left:12px;">💬</span> 
-            <span onclick="alert('Shared')" style="cursor:pointer; margin-left:12px;">✈️</span>
-          </div>
-          <div><span onclick="alert('Saved')" style="cursor:pointer">🔖</span></div>
-        </div>
-        <div class="post-likes">0 likes</div>
-        <div class="post-caption"><b>${currentUsername}</b> ${caption || ''}</div>
-      `;
-
-      feed.prepend(newPost);
-      alert('Aapka post successfully publish ho gaya hai!');
-      
-      // Reset form
-      document.getElementById('captionInput').value = '';
-      document.getElementById('mediaPreviewContainer').innerHTML = '';
-      document.getElementById('mediaPreviewContainer').style.display = 'none';
-      document.getElementById('previewText').style.display = 'block';
-      selectedFileUrl = null;
-
-      switchTab('home-tab', document.querySelectorAll('.nav-btn')[0]);
-    }
-  </script>
-</body>
-  </html>
-  
+            <span onc
