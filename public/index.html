@@ -8,7 +8,6 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background-color: #000; color: #fff; padding-bottom: 90px; }
 
-    /* Top Bar */
     header {
       display: flex; justify-content: space-between; align-items: center;
       padding: 12px 16px; border-bottom: 1px solid #262626; position: sticky; top: 0; background: #000; z-index: 100;
@@ -16,17 +15,14 @@
     .logo { font-size: 22px; font-weight: bold; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .header-icons { display: flex; gap: 16px; font-size: 20px; align-items: center; cursor: pointer; }
 
-    /* Tabs */
     .tab-page { display: none; }
     .tab-page.active { display: block; }
 
-    /* Stories */
     .stories-container { display: flex; gap: 14px; padding: 12px 16px; overflow-x: auto; border-bottom: 1px solid #262626; }
     .story { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; cursor: pointer; }
     .story-ring { width: 60px; height: 60px; border-radius: 50%; padding: 2px; background: linear-gradient(45deg, #f09433, #dc2743); }
     .story-img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid #000; background: #333; }
 
-    /* Post Card */
     .post { border-bottom: 1px solid #1c1c1e; margin-bottom: 12px; background: #000; }
     .post-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; font-size: 14px; font-weight: 600; }
     .post-avatar { width: 30px; height: 30px; border-radius: 50%; background: #555; display: inline-block; vertical-align: middle; margin-right: 8px; background-size: cover; background-position: center; }
@@ -36,17 +32,14 @@
     .post-likes { padding: 0 16px 4px; font-weight: 600; font-size: 13px; }
     .post-caption { padding: 0 16px 10px; font-size: 13px; color: #ddd; }
 
-    /* Reels View */
     .reel-card { height: calc(100vh - 130px); background: #111; position: relative; display: flex; align-items: center; justify-content: center; color: #ccc; }
     .reel-sidebar { position: absolute; right: 14px; bottom: 80px; display: flex; flex-direction: column; gap: 20px; align-items: center; font-size: 13px; cursor: pointer; }
     .reel-info { position: absolute; left: 16px; bottom: 20px; display: flex; flex-direction: column; gap: 6px; }
 
-    /* Upload Page */
     .upload-container { padding: 20px; text-align: center; }
     .upload-box { border: 2px dashed #444; border-radius: 12px; padding: 25px 15px; margin-top: 15px; background: #121212; color: #aaa; cursor: pointer; }
     .action-btn { background: #0095f6; color: #fff; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; margin-top: 15px; cursor: pointer; font-size: 14px; width: 100%; }
 
-    /* Profile View */
     .profile-header { padding: 16px; }
     .profile-info { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
     .profile-dp { width: 75px; height: 75px; border-radius: 50%; background: #333; background-size: cover; background-position: center; cursor: pointer; border: 2px solid #555; }
@@ -56,32 +49,27 @@
     .profile-btns { display: flex; gap: 8px; margin-top: 12px; }
     .p-btn { flex: 1; background: #1c1c1e; color: #fff; border: 1px solid #333; padding: 8px; border-radius: 8px; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; }
 
-    /* Modal Popup for Edit Profile */
     #editProfileModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; }
     .modal-content { background: #1c1c1e; padding: 20px; border-radius: 12px; width: 90%; max-width: 400px; border: 1px solid #333; }
 
-    /* Messages / Chat View */
     .chat-header { padding: 12px 16px; font-size: 18px; font-weight: bold; border-bottom: 1px solid #262626; display: flex; justify-content: space-between; align-items: center; }
     .chat-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #1c1c1e; cursor: pointer; }
     .chat-avatar { width: 45px; height: 45px; border-radius: 50%; background: #444; }
 
-    /* Bottom Navigation */
-    .bottom-nav { position: fixed; bottom: 20px; left: 16px; right: 16px; height: 58px; background: #111; border: 1px solid #333; border-radius: 29px; display: flex; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 6px 20px rgba(0,0,0,0.8); }
-    .nav-btn { background: none; border: none; color: #8e8e93; font-size: 22px; cursor: pointer; padding: 10px; }
+    .bottom-nav { position: fixed; bottom: 20px; left: 16px; right: 16px; height: 58px; background: #111; border: 1px solid #333; border-radius: 29px; display: flex; justify-content: space-around; align-items: center; z-index: 9999; box-shadow: 0 6px 20px rgba(0,0,0,0.8); }
+    .nav-btn { background: none; border: none; color: #8e8e93; font-size: 22px; cursor: pointer; padding: 10px; z-index: 10000; }
     .nav-btn.active { color: #fff; }
   </style>
 </head>
 <body>
 
-  <!-- Top Bar -->
   <header>
     <div class="logo">VibeNet</div>
     <div class="header-icons">
-      <span onclick="switchTab('chat-tab', this)">💬</span>
+      <span onclick="switchTab('chat-tab')">💬</span>
     </div>
   </header>
 
-  <!-- TAB 1: HOME FEED -->
   <div id="home-tab" class="tab-page active">
     <div class="stories-container">
       <div class="story" onclick="alert('Open Your Story Camera')"><div class="story-ring"><div class="story-img"></div></div><span>Your Story</span></div>
@@ -113,7 +101,6 @@
     </div>
   </div>
 
-  <!-- TAB 2: REELS -->
   <div id="reels-tab" class="tab-page">
     <div class="reel-card">
       <div style="font-size:16px;">🎬 Full Screen Reels Video Playing...</div>
@@ -129,7 +116,6 @@
     </div>
   </div>
 
-  <!-- TAB 3: UPLOAD POST / REEL / STORY -->
   <div id="upload-tab" class="tab-page">
     <div class="upload-container">
       <h2 style="margin-bottom: 5px;">Create New Post / Reel</h2>
@@ -148,7 +134,6 @@
     </div>
   </div>
 
-  <!-- TAB 4: EARNING & MONETIZATION & SETTINGS -->
   <div id="earning-tab" class="tab-page">
     <div style="padding: 16px;">
       <div style="background: linear-gradient(135deg, #1c1c1e, #2c2c2e); border-radius: 12px; padding: 16px; border: 1px solid #333; margin-bottom: 15px;">
@@ -172,15 +157,13 @@
         <button class="action-btn" style="width: auto; margin:0; padding: 8px 14px; background:#333;" onclick="alert('Withdrawal request of ₹44 submitted successfully! Amount will be credited to your UPI/Bank within 24 hours.')">Withdraw</button>
       </div>
 
-      <!-- Account Settings & Logout -->
       <div style="margin-top: 25px; border-top: 1px solid #262626; padding-top: 15px;">
         <div style="font-weight: bold; margin-bottom: 12px; color: #ff453a;">Account Settings</div>
-        <button class="action-btn" style="background: #ff3b30;" onclick="alert('Logged out successfully! Redirecting to login page...')">Log Out</button>
+        <button class="action-btn" style="background: #ff3b30;" onclick="alert('Logged out successfully!')">Log Out</button>
       </div>
     </div>
   </div>
 
-  <!-- TAB 5: PROFILE -->
   <div id="profile-tab" class="tab-page">
     <div class="profile-header">
       <div class="profile-info">
@@ -207,7 +190,6 @@
     </div>
   </div>
 
-  <!-- EDIT PROFILE MODAL -->
   <div id="editProfileModal">
     <div class="modal-content">
       <h3 style="margin-bottom: 15px; color: #fff;">Edit Profile</h3>
@@ -224,11 +206,10 @@
     </div>
   </div>
 
-  <!-- CHAT / MESSAGES SCREEN -->
   <div id="chat-tab" class="tab-page">
     <div class="chat-header">
       <span>Messages</span>
-      <span onclick="switchTab('home-tab', document.querySelector('.nav-btn'))" style="cursor:pointer; font-size:14px; color:#0095f6;">Back</span>
+      <span onclick="switchTab('home-tab', document.getElementById('nav-home'))" style="cursor:pointer; font-size:14px; color:#0095f6;">Back</span>
     </div>
     <div class="chat-item" onclick="alert('Opening chat with mr_shanu')">
       <div class="chat-avatar"></div>
@@ -239,13 +220,12 @@
     </div>
   </div>
 
-  <!-- Bottom Navigation -->
   <nav class="bottom-nav">
-    <button class="nav-btn active" onclick="switchTab('home-tab', this)">🏠</button>
-    <button class="nav-btn" onclick="switchTab('reels-tab', this)">🎬</button>
-    <button class="nav-btn" onclick="switchTab('upload-tab', this)">➕</button>
-    <button class="nav-btn" onclick="switchTab('earning-tab', this)">💵</button>
-    <button class="nav-btn" onclick="switchTab('profile-tab', this)">👤</button>
+    <button class="nav-btn active" id="nav-home" onclick="switchTab('home-tab', this)">🏠</button>
+    <button class="nav-btn" id="nav-reels" onclick="switchTab('reels-tab', this)">🎬</button>
+    <button class="nav-btn" id="nav-upload" onclick="switchTab('upload-tab', this)">➕</button>
+    <button class="nav-btn" id="nav-earning" onclick="switchTab('earning-tab', this)">💵</button>
+    <button class="nav-btn" id="nav-profile" onclick="switchTab('profile-tab', this)">👤</button>
   </nav>
 
   <script>
@@ -255,7 +235,6 @@
     let currentBio = localStorage.getItem('vibenet_bio') || "Welcome to my VibeNet official profile! 🚀";
     let currentDp = localStorage.getItem('vibenet_dp') || "";
 
-    // Load saved data on start
     window.onload = function() {
       document.getElementById('displayUsername').innerHTML = `${currentUsername} <span style="color:#0095f6">✔️</span>`;
       document.getElementById('displayBio').innerText = currentBio;
@@ -269,7 +248,9 @@
       document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-btn').forEach(b => { if(b) b.classList.remove('active'); });
       document.getElementById(tabId).classList.add('active');
-      if(btn && btn.classList) btn.classList.add('active');
+      if(btn && btn.classList) {
+        btn.classList.add('active');
+      }
     }
 
     function updateProfileDp(event) {
@@ -370,4 +351,14 @@
         <div class="post-media">${mediaHtml}</div>
         <div class="post-actions">
           <div>
-            <span onc
+            <span onclick="alert('Liked!')" style="cursor:pointer">❤️</span> 
+            <span onclick="alert('Comments')" style="cursor:pointer; margin-left:12px;">💬</span> 
+            <span onclick="alert('Shared')" style="cursor:pointer; margin-left:12px;">✈️</span>
+          </div>
+          <div><span onclick="alert('Saved')" style="cursor:pointer">🔖</span></div>
+        </div>
+        <div class="post-likes">0 likes</div>
+        <div class="post-caption"><b>${currentUsername}</b> ${caption || ''}</div>
+      `;
+
+      fe
