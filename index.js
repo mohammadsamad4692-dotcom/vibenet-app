@@ -63,3 +63,52 @@ app.post('/api/login', async (req, res) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
     
+// --- POST ROUTES ---
+
+// Create Post
+app.post('/api/posts', async (req, res) => {
+  try {
+    const { userId, username, mediaUrl, caption } = req.body;
+    if (!userId || !mediaUrl) {
+      return res.status(400).json({ error: 'User ID and Media are required!' });
+    }
+
+    const newPost = new Post({ userId, username, mediaUrl, caption });
+    await newPost.save();
+    res.json({ message: 'Post uploaded successfully!', post: newPost });
+  } catch (err) {
+    res.status(500).json({ error: 'Error uploading post' });
+  }
+});
+
+// Get All Posts (Feed)
+app.get('/api/posts', async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ createdAt: -1 });
+    res.json(posts);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching posts' });
+  }
+});
+
+// Delete Post (Strict Ownership Check)
+app.delete('/api/posts/:id', async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const { userId } = req.body; // Request se login user ki ID aayegi
+
+    const post = await Post.findById(postId);
+    if (!post) return res.status(404).json({ error: 'Post not found!' });
+
+    // Check if the logged-in user is the owner of the post
+    if (post.userId.toString() !== userId) {
+      return res.status(403).json({ error: 'Unauthorized! You can only delete your own posts.' });
+    }
+
+    await Post.findByIdAndDelete(postId);
+    res.json({ message: 'Post deleted successfully!' });
+  } catch (err) {
+    res.status(500).json({ error: 'Error deleting post' });
+  }
+});
+      
