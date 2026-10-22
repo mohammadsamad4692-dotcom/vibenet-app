@@ -18,7 +18,7 @@
     <div class="w-full max-w-md bg-[#0f172a] flex flex-col min-h-screen relative pb-28 shadow-2xl overflow-hidden">
 
         <!-- AUTH SCREEN -->
-        <div id="auth-screen" style="display: flex;" class="fixed inset-0 z-50 bg-[#0b0e14] flex flex-col items-center justify-center p-6 max-w-md mx-auto">
+        <div id="auth-screen" class="fixed inset-0 z-50 bg-[#0b0e14] flex flex-col items-center justify-center p-6 max-w-md mx-auto">
             <div class="w-full space-y-6 text-center">
                 <div class="inline-block p-4 rounded-3xl bg-gradient-to-tr from-pink-500 via-purple-600 to-indigo-500 shadow-lg">
                     <i class="fa-solid font-bold text-4xl text-white">V</i>
@@ -32,7 +32,7 @@
                     <input type="text" id="auth-username" placeholder="Username" class="w-full px-4 py-3 bg-[#0f172a] rounded-xl border border-gray-700 text-sm text-white focus:outline-none">
                     <input type="password" id="auth-password" placeholder="Password" class="w-full px-4 py-3 bg-[#0f172a] rounded-xl border border-gray-700 text-sm text-white focus:outline-none">
                     
-                    <button type="button" onclick="executeLogin()" class="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 font-semibold rounded-xl text-sm text-white cursor-pointer shadow-md">
+                    <button type="button" id="main-login-btn" class="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 font-semibold rounded-xl text-sm text-white cursor-pointer shadow-md active:scale-95 transition">
                         Log In
                     </button>
                 </div>
@@ -142,9 +142,9 @@
                     <h3 class="text-sm font-extrabold text-gray-100">Creator Earnings & Monetization</h3>
                     <p class="text-2xl font-black text-green-400">$142.50</p>
                     <div class="text-left bg-[#0f172a]/80 p-3 rounded-xl border border-gray-800 space-y-1.5 text-xs text-gray-300">
-                        <p class="font-bold text-yellow-400"><i class="fa-solid fa-circle-info mr-1"></i> Monetization Status:</p>
-                        <p>• Earning start hoti hai jab aapke followers 1,000 aur total views 10,000 ho jayein.</p>
-                        <p>• Ads aur Blue Tick features activate karne ke liye APK version me real payment gateway integrate hoga.</p>
+                        <p class="font-bold text-yellow-400"><i class="fa-solid fa-circle-info mr-1"></i> Monetization Rules:</p>
+                        <p>• Monetization tab mein earning real-time update hogi.</p>
+                        <p>• APK version release hone ke baad views & ads se direct earning payout milega.</p>
                     </div>
                 </div>
             </section>
@@ -162,7 +162,6 @@
                     </div>
                 </div>
 
-                <!-- Followers / Following Stats Box -->
                 <div class="grid grid-cols-3 gap-2 bg-[#1e293b] p-3 rounded-2xl border border-gray-800 text-center">
                     <div>
                         <p class="text-sm font-bold text-white">42</p>
@@ -196,7 +195,7 @@
 
         </main>
 
-        <!-- FLOATING BOTTOM NAVIGATION -->
+        <!-- BOTTOM NAVIGATION -->
         <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-sm glass-nav rounded-full px-4 py-2.5 flex items-center justify-between z-40 shadow-2xl">
             <button onclick="switchTab('home')" class="text-pink-500 cursor-pointer"><i class="fa-solid fa-house text-lg"></i></button>
             <button onclick="switchTab('reels')" class="text-gray-400 cursor-pointer"><i class="fa-solid fa-clapperboard text-lg"></i></button>
@@ -221,38 +220,43 @@
             }
         ];
 
-        function executeLogin() {
-            const usernameInput = document.getElementById("auth-username");
-            const val = usernameInput ? usernameInput.value.trim() : "";
-            const finalUser = val !== "" ? val : "VibeCreator";
-            
-            localStorage.setItem("vibenet_logged", "true");
-            localStorage.setItem("vibenet_user", finalUser);
-            
-            document.getElementById("auth-screen").style.display = "none";
-            document.getElementById("profile-name").innerText = finalUser;
-            switchTab('home');
-        }
+        // Direct Guaranteed Click Listener
+        document.addEventListener("DOMContentLoaded", () => {
+            const loginBtn = document.getElementById("main-login-btn");
+            if(loginBtn) {
+                loginBtn.addEventListener("click", () => {
+                    const input = document.getElementById("auth-username");
+                    const userVal = (input && input.value.trim()) ? input.value.trim() : "vibNet";
+                    
+                    try {
+                        localStorage.setItem("vibenet_logged", "true");
+                        localStorage.setItem("vibenet_user", userVal);
+                    } catch(e) {}
+
+                    const authScreen = document.getElementById("auth-screen");
+                    if(authScreen) authScreen.style.display = "none";
+                    
+                    const profileName = document.getElementById("profile-name");
+                    if(profileName) profileName.innerText = userVal;
+                    
+                    switchTab('home');
+                });
+            }
+
+            if(localStorage.getItem("vibenet_logged") === "true") {
+                const authScreen = document.getElementById("auth-screen");
+                if(authScreen) authScreen.style.display = "none";
+                const saved = localStorage.getItem("vibenet_user");
+                if(saved && document.getElementById("profile-name")) {
+                    document.getElementById("profile-name").innerText = saved;
+                }
+            }
+            renderFeed();
+        });
 
         function logoutUser() {
             localStorage.clear();
             location.reload();
-        }
-
-        window.onload = function() {
-            if(localStorage.getItem("vibenet_logged") === "true") {
-                document.getElementById("auth-screen").style.display = "none";
-                const saved = localStorage.getItem("vibenet_user");
-                if(saved) document.getElementById("profile-name").innerText = saved;
-                const savedBio = localStorage.getItem("vibenet_bio");
-                if(savedBio) document.getElementById("profile-bio").innerText = savedBio;
-                const savedDp = localStorage.getItem("vibenet_dp");
-                if(savedDp) {
-                    document.getElementById("profile-dp-img").src = savedDp;
-                    document.getElementById("story-dp-img").src = savedDp;
-                }
-            }
-            renderFeed();
         }
 
         function updateProfileInfo() {
@@ -308,5 +312,4 @@
             `).join('');
         }
 
-        function toggleLike(id) {
-            const post = posts.find(p
+        function t
