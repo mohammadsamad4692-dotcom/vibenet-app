@@ -26,7 +26,7 @@
             background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
         }
         .glass-nav {
-            background: rgba(18, 24, 38, 0.85);
+            background: rgba(18, 24, 38, 0.95);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -67,7 +67,7 @@
         </div>
 
         <!-- ================= TOP HEADER ================= -->
-        <header id="app-header" class="sticky top-0 z-40 bg-[#0f172a]/90 backdrop-blur-md px-4 py-3 flex items-center justify-between border-b border-gray-800">
+        <header id="app-header" class="sticky top-0 z-40 bg-[#0f172a]/95 backdrop-blur-md px-4 py-3 flex items-center justify-between border-b border-gray-800">
             <div class="flex items-center gap-2">
                 <span class="text-2xl font-black bg-gradient-to-r from-pink-500 via-purple-400 to-indigo-400 bg-clip-text text-transparent">VibeNet</span>
                 <span class="text-[10px] bg-pink-500/20 text-pink-400 font-bold px-1.5 py-0.5 rounded border border-pink-500/30">PRO</span>
@@ -113,12 +113,6 @@
                         </div>
                         <span class="text-[11px] text-gray-300 truncate w-14 text-center">Leo_Beats</span>
                     </div>
-                    <div class="flex flex-col items-center gap-1 cursor-pointer min-w-[64px]">
-                        <div class="w-14 h-14 rounded-full p-[2px] story-ring">
-                            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150" class="w-full h-full rounded-full object-cover border-2 border-[#0f172a]">
-                        </div>
-                        <span class="text-[11px] text-gray-300 truncate w-14 text-center">Aria</span>
-                    </div>
                 </div>
 
                 <!-- Live Feed Container -->
@@ -132,7 +126,6 @@
                 <div class="h-full w-full relative flex items-center justify-center">
                     <video id="reel-player" class="h-full w-full object-cover" loop autoplay muted playsinline src="https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4"></video>
 
-                    <!-- Overlay Controls -->
                     <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 p-4 flex flex-col justify-between">
                         <div class="flex justify-between items-center text-white">
                             <span class="font-bold text-lg tracking-wide">Reels</span>
@@ -140,7 +133,6 @@
                         </div>
 
                         <div class="flex justify-between items-end pb-8">
-                            <!-- Left Info -->
                             <div class="space-y-2 max-w-[75%]">
                                 <div class="flex items-center gap-2">
                                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="w-9 h-9 rounded-full object-cover border border-white">
@@ -155,7 +147,6 @@
                                 </div>
                             </div>
 
-                            <!-- Right Actions -->
                             <div class="flex flex-col items-center gap-5 text-white">
                                 <button onclick="toggleReelLike(this)" class="flex flex-col items-center gap-1">
                                     <i class="fa-solid fa-heart text-2xl text-gray-300 transition"></i>
@@ -164,10 +155,6 @@
                                 <button class="flex flex-col items-center gap-1">
                                     <i class="fa-solid fa-comment text-2xl"></i>
                                     <span class="text-xs font-semibold">1,082</span>
-                                </button>
-                                <button class="flex flex-col items-center gap-1">
-                                    <i class="fa-solid fa-paper-plane text-2xl"></i>
-                                    <span class="text-xs font-semibold">Share</span>
                                 </button>
                             </div>
                         </div>
@@ -200,7 +187,7 @@
                         <textarea id="post-caption" rows="3" placeholder="Write a caption..." class="w-full bg-[#0f172a] border border-gray-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-pink-500 resize-none"></textarea>
                     </div>
 
-                    <button onclick="publishNewPost()" class="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 font-semibold rounded-xl text-xs text-white shadow-lg shadow-pink-500/20 active:scale-95 transition">
+                    <button onclick="publishNewPost()" class="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 font-semibold rounded-xl text-xs text-white shadow-lg shadow-pink-500/20 active:scale-95 transition cursor-pointer">
                         Publish to VibeNet
                     </button>
                 </div>
@@ -262,7 +249,7 @@
                     </div>
                 </div>
 
-                <button onclick="logoutUser()" class="w-full py-2.5 bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl text-xs font-semibold hover:bg-red-500/20 transition">
+                <button onclick="logoutUser()" class="w-full py-2.5 bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl text-xs font-semibold hover:bg-red-500/20 transition cursor-pointer">
                     <i class="fa-solid fa-right-from-bracket mr-1"></i> Log Out
                 </button>
             </section>
@@ -271,19 +258,19 @@
 
         <!-- ================= FLOATING NAVIGATION BAR ================= -->
         <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-sm glass-nav rounded-full px-4 py-2.5 flex items-center justify-between z-50 shadow-2xl">
-            <button onclick="switchTab('home')" class="nav-btn text-pink-500 flex flex-col items-center">
+            <button onclick="switchTab('home')" class="nav-btn text-pink-500 flex flex-col items-center cursor-pointer">
                 <i class="fa-solid fa-house text-lg"></i>
             </button>
-            <button onclick="switchTab('reels')" class="nav-btn text-gray-400 flex flex-col items-center">
+            <button onclick="switchTab('reels')" class="nav-btn text-gray-400 flex flex-col items-center cursor-pointer">
                 <i class="fa-solid fa-clapperboard text-lg"></i>
             </button>
-            <button onclick="switchTab('create')" class="nav-btn text-gray-400 flex flex-col items-center">
+            <button onclick="switchTab('create')" class="nav-btn text-gray-400 flex flex-col items-center cursor-pointer">
                 <i class="fa-solid fa-circle-plus text-xl text-purple-400"></i>
             </button>
-            <button onclick="switchTab('chat')" class="nav-btn text-gray-400 flex flex-col items-center">
+            <button onclick="switchTab('chat')" class="nav-btn text-gray-400 flex flex-col items-center cursor-pointer">
                 <i class="fa-solid fa-message text-lg"></i>
             </button>
-            <button onclick="switchTab('profile')" class="nav-btn text-gray-400 flex flex-col items-center">
+            <button onclick="switchTab('profile')" class="nav-btn text-gray-400 flex flex-col items-center cursor-pointer">
                 <i class="fa-solid fa-user text-lg"></i>
             </button>
         </nav>
@@ -304,22 +291,44 @@
             }
         ];
 
-        // Persistent Auth Logic
         document.addEventListener("DOMContentLoaded", () => {
             const token = localStorage.getItem("vibenet_token");
             const savedUser = localStorage.getItem("vibenet_user");
 
             if (token && savedUser) {
-                document.getElementById("auth-screen").style.display = "none";
+                const authScreen = document.getElementById("auth-screen");
+                if (authScreen) authScreen.remove();
                 document.getElementById("profile-name").innerText = savedUser;
-            } else {
-                document.getElementById("auth-screen").style.display = "flex";
             }
 
             renderFeed();
         });
 
         function handleLogin() {
-            const userVal = document.getElementById("auth-username").value || "VibeCreator";
+            const userVal = document.getElementById("auth-username").value.trim() || "VibeCreator";
             localStorage.setItem("vibenet_token", "sample_jwt_token_123");
-            l
+            localStorage.setItem("vibenet_user", userVal);
+            
+            const authScreen = document.getElementById("auth-screen");
+            if (authScreen) authScreen.remove();
+            
+            document.getElementById("profile-name").innerText = userVal;
+            switchTab('home');
+        }
+
+        function handleSignup() {
+            handleLogin();
+        }
+
+        function logoutUser() {
+            localStorage.removeItem("vibenet_token");
+            localStorage.removeItem("vibenet_user");
+            location.reload();
+        }
+
+        function renderFeed() {
+            const container = document.getElementById("feed-container");
+            if (!container) return;
+            container.innerHTML = posts.map(post => `
+                <div class="bg-[#1e293b] rounded-2xl border border-gray-800/80 overflow-hidden space-y-2">
+                    <div class="px-3 py-2.5 flex items-center ju
