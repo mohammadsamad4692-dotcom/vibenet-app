@@ -56,10 +56,10 @@
                     <input type="text" id="auth-username" placeholder="Username" class="w-full px-4 py-3 bg-[#0f172a] rounded-xl border border-gray-700 text-sm focus:outline-none focus:border-pink-500 text-white placeholder-gray-500 transition">
                     <input type="password" id="auth-password" placeholder="Password" class="w-full px-4 py-3 bg-[#0f172a] rounded-xl border border-gray-700 text-sm focus:outline-none focus:border-pink-500 text-white placeholder-gray-500 transition">
                     
-                    <button onclick="handleLogin()" class="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 font-semibold rounded-xl text-sm shadow-md hover:opacity-90 active:scale-95 transition">
+                    <button type="button" onclick="handleLogin()" class="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 font-semibold rounded-xl text-sm shadow-md hover:opacity-90 active:scale-95 transition cursor-pointer">
                         Log In
                     </button>
-                    <button onclick="handleSignup()" class="w-full py-3 bg-[#0f172a] border border-gray-700 font-semibold rounded-xl text-sm text-gray-300 hover:bg-gray-800 active:scale-95 transition">
+                    <button type="button" onclick="handleSignup()" class="w-full py-3 bg-[#0f172a] border border-gray-700 font-semibold rounded-xl text-sm text-gray-300 hover:bg-gray-800 active:scale-95 transition cursor-pointer">
                         Create New Account
                     </button>
                 </div>
@@ -118,12 +118,6 @@
                             <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150" class="w-full h-full rounded-full object-cover border-2 border-[#0f172a]">
                         </div>
                         <span class="text-[11px] text-gray-300 truncate w-14 text-center">Aria</span>
-                    </div>
-                    <div class="flex flex-col items-center gap-1 cursor-pointer min-w-[64px]">
-                        <div class="w-14 h-14 rounded-full p-[2px] story-ring">
-                            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150" class="w-full h-full rounded-full object-cover border-2 border-[#0f172a]">
-                        </div>
-                        <span class="text-[11px] text-gray-300 truncate w-14 text-center">Dev_Pro</span>
                     </div>
                 </div>
 
@@ -219,7 +213,6 @@
                 </h2>
 
                 <div id="chat-list" class="space-y-2">
-                    <!-- Chat Item 1 -->
                     <div class="flex items-center justify-between p-3 bg-[#1e293b] rounded-2xl border border-gray-800/80 cursor-pointer hover:border-gray-700 transition">
                         <div class="flex items-center gap-3">
                             <div class="relative">
@@ -233,24 +226,10 @@
                         </div>
                         <span class="text-[10px] text-gray-500">2m ago</span>
                     </div>
-
-                    <!-- Chat Item 2 -->
-                    <div class="flex items-center justify-between p-3 bg-[#1e293b] rounded-2xl border border-gray-800/80 cursor-pointer hover:border-gray-700 transition">
-                        <div class="flex items-center gap-3">
-                            <div class="relative">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" class="w-11 h-11 rounded-full object-cover">
-                            </div>
-                            <div>
-                                <h4 class="text-xs font-bold text-gray-200">Leo_Beats</h4>
-                                <p class="text-[11px] text-gray-400 truncate w-40">Which audio track did you use?</p>
-                            </div>
-                        </div>
-                        <span class="text-[10px] text-gray-500">1h ago</span>
-                    </div>
                 </div>
             </section>
 
-            <!-- 5. MONETIZATION & VERIFICATION TAB -->
+            <!-- 5. MONETIZATION TAB -->
             <section id="tab-monetization" class="hidden p-4 space-y-4">
                 <div class="bg-gradient-to-r from-yellow-500/20 via-purple-500/20 to-pink-500/20 p-4 rounded-2xl border border-yellow-500/30 text-center space-y-2">
                     <i class="fa-solid fa-trophy text-3xl text-yellow-400"></i>
@@ -258,7 +237,6 @@
                     <p class="text-[11px] text-gray-300">Monetize your posts, reels and get verified on VibeNet Pro.</p>
                 </div>
 
-                <!-- Revenue Dashboard -->
                 <div class="grid grid-cols-2 gap-3">
                     <div class="bg-[#1e293b] p-3.5 rounded-2xl border border-gray-800 text-center">
                         <span class="text-[10px] text-gray-400 block mb-1">Est. Ad Earnings</span>
@@ -268,18 +246,6 @@
                         <span class="text-[10px] text-gray-400 block mb-1">Profile Views</span>
                         <span class="text-lg font-black text-purple-400">18.4K</span>
                     </div>
-                </div>
-
-                <!-- Blue Tick Application -->
-                <div class="bg-[#1e293b] p-4 rounded-2xl border border-gray-800 space-y-3">
-                    <h4 class="text-xs font-bold text-gray-200 flex items-center gap-1.5">
-                        <i class="fa-solid fa-circle-check text-sky-400"></i> Apply for Blue Verification Badge
-                    </h4>
-                    <p class="text-[11px] text-gray-400">Get the blue tick icon on your profile & unlock higher ad commission rates.</p>
-                    <input type="text" placeholder="Government ID / Channel Link" class="w-full bg-[#0f172a] border border-gray-700 rounded-xl p-2.5 text-xs text-white focus:outline-none">
-                    <button onclick="alert('Verification Request Submitted Successfully!')" class="w-full py-2.5 bg-sky-500/20 border border-sky-500/40 text-sky-400 rounded-xl text-xs font-semibold hover:bg-sky-500/30 transition">
-                        Submit Verification Request
-                    </button>
                 </div>
             </section>
 
@@ -293,11 +259,67 @@
                             <i class="fa-solid fa-circle-check badge-verified text-xs"></i>
                         </div>
                         <p class="text-[11px] text-gray-400">Official Creator Account</p>
-                        <div class="flex items-center gap-4 mt-2 text-xs text-gray-300">
-                            <div><strong class="text-white">12</strong> posts</div>
-                            <div><strong class="text-white">4.2K</strong> followers</div>
-                        </div>
                     </div>
                 </div>
 
-             
+                <button onclick="logoutUser()" class="w-full py-2.5 bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl text-xs font-semibold hover:bg-red-500/20 transition">
+                    <i class="fa-solid fa-right-from-bracket mr-1"></i> Log Out
+                </button>
+            </section>
+
+        </main>
+
+        <!-- ================= FLOATING NAVIGATION BAR ================= -->
+        <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-sm glass-nav rounded-full px-4 py-2.5 flex items-center justify-between z-50 shadow-2xl">
+            <button onclick="switchTab('home')" class="nav-btn text-pink-500 flex flex-col items-center">
+                <i class="fa-solid fa-house text-lg"></i>
+            </button>
+            <button onclick="switchTab('reels')" class="nav-btn text-gray-400 flex flex-col items-center">
+                <i class="fa-solid fa-clapperboard text-lg"></i>
+            </button>
+            <button onclick="switchTab('create')" class="nav-btn text-gray-400 flex flex-col items-center">
+                <i class="fa-solid fa-circle-plus text-xl text-purple-400"></i>
+            </button>
+            <button onclick="switchTab('chat')" class="nav-btn text-gray-400 flex flex-col items-center">
+                <i class="fa-solid fa-message text-lg"></i>
+            </button>
+            <button onclick="switchTab('profile')" class="nav-btn text-gray-400 flex flex-col items-center">
+                <i class="fa-solid fa-user text-lg"></i>
+            </button>
+        </nav>
+
+    </div>
+
+    <!-- JavaScript Engine -->
+    <script>
+        let posts = [
+            {
+                id: 1,
+                username: "cyber_vibes",
+                verified: true,
+                music: "Starboy - The Weeknd",
+                mediaUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600",
+                likes: 1240,
+                caption: "Neon city nights with synth soundtrack 🔥 #vibenet #neon #future"
+            }
+        ];
+
+        // Persistent Auth Logic
+        document.addEventListener("DOMContentLoaded", () => {
+            const token = localStorage.getItem("vibenet_token");
+            const savedUser = localStorage.getItem("vibenet_user");
+
+            if (token && savedUser) {
+                document.getElementById("auth-screen").style.display = "none";
+                document.getElementById("profile-name").innerText = savedUser;
+            } else {
+                document.getElementById("auth-screen").style.display = "flex";
+            }
+
+            renderFeed();
+        });
+
+        function handleLogin() {
+            const userVal = document.getElementById("auth-username").value || "VibeCreator";
+            localStorage.setItem("vibenet_token", "sample_jwt_token_123");
+            l
