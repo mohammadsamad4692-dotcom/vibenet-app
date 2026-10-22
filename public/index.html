@@ -75,7 +75,7 @@
                 <div class="flex items-center gap-3 px-4 py-3 overflow-x-auto hide-scrollbar border-b border-gray-800/60">
                     <div class="flex flex-col items-center gap-1 min-w-[64px]">
                         <div class="w-14 h-14 rounded-full p-0.5 bg-gray-700 relative">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="w-full h-full rounded-full object-cover">
+                            <img id="story-dp-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="w-full h-full rounded-full object-cover">
                         </div>
                         <span class="text-[11px] text-gray-300 truncate w-14 text-center">Your Story</span>
                     </div>
@@ -119,7 +119,7 @@
                         <label class="block text-xs font-medium text-gray-400 mb-1">Caption</label>
                         <textarea id="post-caption" rows="3" placeholder="Write a caption..." class="w-full bg-[#0f172a] border border-gray-700 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-pink-500"></textarea>
                     </div>
-                    <button onclick="publishNewPost()" class="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 font-semibold rounded-xl text-xs text-white">
+                    <button onclick="publishNewPost()" class="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 font-semibold rounded-xl text-xs text-white cursor-pointer">
                         Publish to VibeNet
                     </button>
                 </div>
@@ -145,7 +145,7 @@
             <section id="tab-monetization" class="hidden p-4 space-y-4">
                 <div class="bg-gradient-to-r from-yellow-500/20 to-pink-500/20 p-4 rounded-2xl border border-yellow-500/30 text-center space-y-2">
                     <i class="fa-solid fa-trophy text-3xl text-yellow-400"></i>
-                    <h3 class="text-sm font-extrabold text-gray-100">Creator Earnings</h3>
+                    <h3 class="text-sm font-extrabold text-gray-100">Creator Earnings & Ads</h3>
                     <p class="text-lg font-black text-green-400">$142.50</p>
                 </div>
             </section>
@@ -153,13 +153,29 @@
             <!-- 6. PROFILE TAB -->
             <section id="tab-profile" class="hidden p-4 space-y-4">
                 <div class="flex items-center gap-4">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200" class="w-16 h-16 rounded-full object-cover border-2 border-pink-500">
+                    <img id="profile-dp-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200" class="w-16 h-16 rounded-full object-cover border-2 border-pink-500">
                     <div>
-                        <h3 id="profile-name" class="font-bold text-sm text-gray-100">User</h3>
-                        <p class="text-[11px] text-gray-400">Official Creator Account</p>
+                        <div class="flex items-center gap-1">
+                            <h3 id="profile-name" class="font-bold text-sm text-gray-100">User</h3>
+                            <i class="fa-solid fa-circle-check badge-verified text-xs"></i>
+                        </div>
+                        <p id="profile-bio" class="text-[11px] text-gray-400">Official Creator Account</p>
                     </div>
                 </div>
-                <button onclick="logoutUser()" class="w-full py-2.5 bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl text-xs font-semibold">
+
+                <!-- Edit Profile & DP Card -->
+                <div class="bg-[#1e293b] p-4 rounded-2xl border border-gray-800 space-y-3">
+                    <p class="text-xs font-bold text-gray-200"><i class="fa-solid fa-pen-to-square text-pink-400 mr-1"></i> Edit Profile & DP</p>
+                    <div>
+                        <label class="block text-[10px] text-gray-400 mb-1">Upload Profile Picture (DP)</label>
+                        <input type="file" id="dp-file-input" accept="image/*" class="w-full text-xs text-gray-400 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:bg-purple-500/20 file:text-purple-300 cursor-pointer">
+                    </div>
+                    <input type="text" id="input-new-name" placeholder="Change Username" class="w-full px-3 py-2 bg-[#0f172a] rounded-xl border border-gray-700 text-xs text-white">
+                    <input type="text" id="input-new-bio" placeholder="Update Bio" class="w-full px-3 py-2 bg-[#0f172a] rounded-xl border border-gray-700 text-xs text-white">
+                    <button onclick="updateProfileInfo()" class="w-full py-2 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl text-xs font-semibold text-white cursor-pointer">Save Changes</button>
+                </div>
+
+                <button onclick="logoutUser()" class="w-full py-2.5 bg-red-500/10 border border-red-500/30 text-red-400 rounded-xl text-xs font-semibold cursor-pointer">
                     Log Out
                 </button>
             </section>
@@ -168,32 +184,43 @@
 
         <!-- FLOATING NAVIGATION BAR -->
         <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-sm glass-nav rounded-full px-4 py-2.5 flex items-center justify-between z-40 shadow-2xl">
-            <button onclick="switchTab('home')" class="text-pink-500"><i class="fa-solid fa-house text-lg"></i></button>
-            <button onclick="switchTab('reels')" class="text-gray-400"><i class="fa-solid fa-clapperboard text-lg"></i></button>
-            <button onclick="switchTab('create')" class="text-purple-400"><i class="fa-solid fa-circle-plus text-xl"></i></button>
-            <button onclick="switchTab('chat')" class="text-gray-400"><i class="fa-solid fa-message text-lg"></i></button>
-            <button onclick="switchTab('profile')" class="text-gray-400"><i class="fa-solid fa-user text-lg"></i></button>
+            <button onclick="switchTab('home')" class="text-pink-500 cursor-pointer"><i class="fa-solid fa-house text-lg"></i></button>
+            <button onclick="switchTab('reels')" class="text-gray-400 cursor-pointer"><i class="fa-solid fa-clapperboard text-lg"></i></button>
+            <button onclick="switchTab('create')" class="text-purple-400 cursor-pointer"><i class="fa-solid fa-circle-plus text-xl"></i></button>
+            <button onclick="switchTab('chat')" class="text-gray-400 cursor-pointer"><i class="fa-solid fa-message text-lg"></i></button>
+            <button onclick="switchTab('profile')" class="text-gray-400 cursor-pointer"><i class="fa-solid fa-user text-lg"></i></button>
         </nav>
 
     </div>
 
     <script>
-        let posts = [{
-            id: 1,
-            username: "cyber_vibes",
-            verified: true,
-            music: "Starboy - The Weeknd",
-            mediaUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600",
-            likes: 1240,
-            caption: "Neon city nights with synth soundtrack 🔥"
-        }];
+        let posts = [
+            {
+                id: 1,
+                username: "cyber_vibes",
+                verified: true,
+                music: "Starboy - The Weeknd",
+                mediaUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600",
+                likes: 1240,
+                caption: "Neon city nights with synth soundtrack 🔥",
+                liked: false
+            }
+        ];
 
         document.addEventListener("DOMContentLoaded", () => {
             const token = localStorage.getItem("vibenet_token");
             const savedUser = localStorage.getItem("vibenet_user");
+            const savedBio = localStorage.getItem("vibenet_bio");
+            const savedDp = localStorage.getItem("vibenet_dp");
+
             if (token && savedUser) {
                 document.getElementById("auth-screen").style.display = "none";
                 document.getElementById("profile-name").innerText = savedUser;
+                if(savedBio) document.getElementById("profile-bio").innerText = savedBio;
+                if(savedDp) {
+                    document.getElementById("profile-dp-img").src = savedDp;
+                    document.getElementById("story-dp-img").src = savedDp;
+                }
             }
             renderFeed();
         });
@@ -210,9 +237,33 @@
         function handleSignup() { handleLogin(); }
         function logoutUser() { localStorage.clear(); location.reload(); }
 
+        function updateProfileInfo() {
+            const newName = document.getElementById("input-new-name").value.trim();
+            const newBio = document.getElementById("input-new-bio").value.trim();
+            const dpInput = document.getElementById("dp-file-input");
+
+            if(newName) {
+                localStorage.setItem("vibenet_user", newName);
+                document.getElementById("profile-name").innerText = newName;
+            }
+            if(newBio) {
+                localStorage.setItem("vibenet_bio", newBio);
+                document.getElementById("profile-bio").innerText = newBio;
+            }
+            if(dpInput.files && dpInput.files[0]) {
+                const dpUrl = URL.createObjectURL(dpInput.files[0]);
+                localStorage.setItem("vibenet_dp", dpUrl);
+                document.getElementById("profile-dp-img").src = dpUrl;
+                document.getElementById("story-dp-img").src = dpUrl;
+            }
+            alert("Profile updated successfully!");
+        }
+
         function renderFeed() {
             const container = document.getElementById("feed-container");
             if(!container) return;
+            const currentUser = localStorage.getItem("vibenet_user") || "You";
+
             container.innerHTML = posts.map(p => `
                 <div class="bg-[#1e293b] rounded-2xl border border-gray-800 overflow-hidden space-y-2">
                     <div class="px-3 py-2.5 flex items-center justify-between">
@@ -220,16 +271,38 @@
                             <span class="text-xs font-bold text-gray-200">${p.username}</span>
                             ${p.verified ? '<i class="fa-solid fa-circle-check badge-verified text-[10px]"></i>' : ''}
                         </div>
+                        ${p.username === currentUser ? `<button onclick="deletePost(${p.id})" class="text-red-400 text-xs hover:text-red-300 cursor-pointer"><i class="fa-solid fa-trash"></i> Delete</button>` : ''}
                     </div>
                     <div class="w-full max-h-96 bg-black flex items-center justify-center overflow-hidden">
                         <img src="${p.mediaUrl}" class="w-full object-cover">
                     </div>
-                    <div class="px-3 pb-3 space-y-1">
+                    <div class="px-3 pb-3 space-y-1.5">
+                        <div class="flex items-center gap-4 text-lg">
+                            <button onclick="toggleLike(${p.id})" class="cursor-pointer ${p.liked ? 'text-pink-500' : 'text-gray-300'}"><i class="${p.liked ? 'fa-solid' : 'fa-regular'} fa-heart"></i></button>
+                            <button onclick="alert('Comments section')" class="text-gray-300 text-base"><i class="fa-regular fa-comment"></i></button>
+                            <button onclick="alert('Post shared link copied!')" class="text-gray-300 text-base"><i class="fa-regular fa-paper-plane"></i></button>
+                        </div>
                         <p class="text-xs font-bold text-gray-200">${p.likes} likes</p>
                         <p class="text-xs text-gray-300"><span class="font-bold mr-1">${p.username}</span>${p.caption}</p>
                     </div>
                 </div>
             `).join('');
+        }
+
+        function toggleLike(id) {
+            const post = posts.find(p => p.id === id);
+            if(post) {
+                post.liked = !post.liked;
+                post.likes += post.liked ? 1 : -1;
+                renderFeed();
+            }
+        }
+
+        function deletePost(id) {
+            if(confirm("Kya aap yeh post delete karna chahte hain?")) {
+                posts = posts.filter(p => p.id !== id);
+                renderFeed();
+            }
         }
 
         function publishNewPost() {
@@ -242,11 +315,14 @@
                     username: user,
                     verified: true,
                     mediaUrl: URL.createObjectURL(fileInput.files[0]),
-                    likes: 1,
+                    likes: 0,
+                    liked: false,
                     caption: caption || "New post!"
                 });
                 renderFeed();
                 switchTab('home');
+                document.getElementById("post-caption").value = "";
+                fileInput.value = "";
             } else {
                 alert("Please select a file!");
             }
@@ -259,9 +335,4 @@
             });
             const active = document.getElementById(`tab-${tabName}`);
             if(active) active.classList.remove('hidden');
-            const v = document.getElementById('reel-player');
-            if(v) { tabName === 'reels' ? v.play() : v.pause(); }
-        }
-    </script>
-</body>
-</html>
+            c
