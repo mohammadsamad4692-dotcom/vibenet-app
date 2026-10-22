@@ -83,7 +83,7 @@
                                     <span class="font-semibold text-sm text-white">cyber_vibes</span>
                                     <i class="fa-solid fa-circle-check badge-verified text-xs"></i>
                                 </div>
-                                <p class="text-xs text-gray-200">Night Lights & Synth Beats 🎧🔥</p>
+                                <p id="reel-music-tag" class="text-xs text-gray-200"><i class="fa-solid fa-music mr-1"></i> Original Audio - VibeNet Beat</p>
                             </div>
                         </div>
                     </div>
@@ -99,6 +99,15 @@
                     <div>
                         <label class="block text-xs font-medium text-gray-400 mb-1">Select Media File</label>
                         <input type="file" id="media-file-input" accept="image/*,video/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:bg-pink-500/20 file:text-pink-400 cursor-pointer">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Add Background Music / Audio</label>
+                        <select id="music-select" class="w-full bg-[#0f172a] border border-gray-700 rounded-xl p-2.5 text-xs text-white focus:outline-none">
+                            <option value="Starboy - The Weeknd">Starboy - The Weeknd</option>
+                            <option value="Night Lights & Synth Beats">Night Lights & Synth Beats</option>
+                            <option value="Lo-Fi Chill Hop - VibeNet">Lo-Fi Chill Hop - VibeNet</option>
+                            <option value="Electronic Summer Anthem">Electronic Summer Anthem</option>
+                        </select>
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-gray-400 mb-1">Caption</label>
@@ -128,10 +137,15 @@
 
             <!-- 5. MONETIZATION TAB -->
             <section id="tab-monetization" class="hidden p-4 space-y-4">
-                <div class="bg-gradient-to-r from-yellow-500/20 to-pink-500/20 p-4 rounded-2xl border border-yellow-500/30 text-center space-y-2">
+                <div class="bg-gradient-to-r from-yellow-500/20 to-pink-500/20 p-4 rounded-2xl border border-yellow-500/30 text-center space-y-3">
                     <i class="fa-solid fa-trophy text-3xl text-yellow-400"></i>
-                    <h3 class="text-sm font-extrabold text-gray-100">Creator Earnings & Ads</h3>
-                    <p class="text-lg font-black text-green-400">$142.50</p>
+                    <h3 class="text-sm font-extrabold text-gray-100">Creator Earnings & Monetization</h3>
+                    <p class="text-2xl font-black text-green-400">$142.50</p>
+                    <div class="text-left bg-[#0f172a]/80 p-3 rounded-xl border border-gray-800 space-y-1.5 text-xs text-gray-300">
+                        <p class="font-bold text-yellow-400"><i class="fa-solid fa-circle-info mr-1"></i> Monetization Status:</p>
+                        <p>• Earning start hoti hai jab aapke followers 1,000 aur total views 10,000 ho jayein.</p>
+                        <p>• Ads aur Blue Tick features activate karne ke liye APK version me real payment gateway integrate hoga.</p>
+                    </div>
                 </div>
             </section>
 
@@ -145,6 +159,22 @@
                             <i class="fa-solid fa-circle-check badge-verified text-xs"></i>
                         </div>
                         <p id="profile-bio" class="text-[11px] text-gray-400">Official Creator Account</p>
+                    </div>
+                </div>
+
+                <!-- Followers / Following Stats Box -->
+                <div class="grid grid-cols-3 gap-2 bg-[#1e293b] p-3 rounded-2xl border border-gray-800 text-center">
+                    <div>
+                        <p class="text-sm font-bold text-white">42</p>
+                        <p class="text-[10px] text-gray-400">Posts</p>
+                    </div>
+                    <div>
+                        <p id="stat-followers" class="text-sm font-bold text-white">1.2K</p>
+                        <p class="text-[10px] text-gray-400">Followers</p>
+                    </div>
+                    <div>
+                        <p id="stat-following" class="text-sm font-bold text-white">340</p>
+                        <p class="text-[10px] text-gray-400">Following</p>
                     </div>
                 </div>
 
@@ -186,6 +216,7 @@
                 mediaUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600",
                 likes: 1240,
                 caption: "Neon city nights with synth soundtrack 🔥",
+                music: "Starboy - The Weeknd",
                 liked: false
             }
         ];
@@ -271,65 +302,11 @@
                         </div>
                         <p class="text-xs font-bold text-gray-200">${p.likes} likes</p>
                         <p class="text-xs text-gray-300"><span class="font-bold mr-1">${p.username}</span>${p.caption}</p>
+                        <p class="text-[11px] text-pink-400 flex items-center gap-1 mt-1"><i class="fa-solid fa-music"></i> ${p.music || 'Original Audio'}</p>
                     </div>
                 </div>
             `).join('');
         }
 
         function toggleLike(id) {
-            const post = posts.find(p => p.id === id);
-            if(post) {
-                post.liked = !post.liked;
-                post.likes += post.liked ? 1 : -1;
-                renderFeed();
-            }
-        }
-
-        function deletePost(id) {
-            if(confirm("Kya aap yeh post delete karna chahte hain?")) {
-                posts = posts.filter(p => p.id !== id);
-                renderFeed();
-            }
-        }
-
-        function publishNewPost() {
-            const fileInput = document.getElementById("media-file-input");
-            const captionInput = document.getElementById("post-caption");
-            const caption = captionInput ? captionInput.value : "";
-            const user = localStorage.getItem("vibenet_user") || "You";
-
-            if (fileInput && fileInput.files && fileInput.files[0]) {
-                posts.unshift({
-                    id: Date.now(),
-                    username: user,
-                    verified: true,
-                    mediaUrl: URL.createObjectURL(fileInput.files[0]),
-                    likes: 0,
-                    liked: false,
-                    caption: caption || "New post!"
-                });
-                renderFeed();
-                switchTab('home');
-                if(captionInput) captionInput.value = "";
-                fileInput.value = "";
-            } else {
-                alert("Please select a file!");
-            }
-        }
-
-        function switchTab(tabName) {
-            ['home', 'reels', 'create', 'chat', 'monetization', 'profile'].forEach(t => {
-                const el = document.getElementById(`tab-${t}`);
-                if(el) el.classList.add('hidden');
-            });
-            const active = document.getElementById(`tab-${tabName}`);
-            if(active) active.classList.remove('hidden');
-            const v = document.getElementById('reel-player');
-            if(v) { 
-                if(tabName === 'reels') { v.play().catch(e => {}); } 
-                else { v.pause(); } 
-            }
-        }
-    </script>
-</body>
-</html>
+            const post = posts.find(p
