@@ -14,9 +14,6 @@
             -webkit-tap-highlight-color: transparent;
         }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .story-ring {
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-        }
         .glass-nav {
             background: rgba(18, 24, 38, 0.95);
             backdrop-filter: blur(12px);
@@ -61,9 +58,9 @@
                 <span class="text-[10px] bg-pink-500/20 text-pink-400 font-bold px-1.5 py-0.5 rounded border border-pink-500/30">PRO</span>
             </div>
             <div class="flex items-center gap-4 text-xl">
-                <button onclick="switchTab('create')" class="text-gray-300 hover:text-white"><i class="fa-regular fa-square-plus"></i></button>
-                <button onclick="switchTab('monetization')" class="text-yellow-400 hover:text-yellow-300"><i class="fa-solid fa-sack-dollar"></i></button>
-                <button onclick="switchTab('chat')" class="text-gray-300 hover:text-white relative"><i class="fa-regular fa-paper-plane"></i></button>
+                <button onclick="switchTab('create')" class="text-gray-300 hover:text-white cursor-pointer"><i class="fa-regular fa-square-plus"></i></button>
+                <button onclick="switchTab('monetization')" class="text-yellow-400 hover:text-yellow-300 cursor-pointer"><i class="fa-solid fa-sack-dollar"></i></button>
+                <button onclick="switchTab('chat')" class="text-gray-300 hover:text-white relative cursor-pointer"><i class="fa-regular fa-paper-plane"></i></button>
             </div>
         </header>
 
@@ -214,47 +211,77 @@
             const savedDp = localStorage.getItem("vibenet_dp");
 
             if (token && savedUser) {
-                document.getElementById("auth-screen").style.display = "none";
-                document.getElementById("profile-name").innerText = savedUser;
-                if(savedBio) document.getElementById("profile-bio").innerText = savedBio;
+                const authScreen = document.getElementById("auth-screen");
+                if(authScreen) authScreen.style.display = "none";
+                
+                const profileName = document.getElementById("profile-name");
+                if(profileName) profileName.innerText = savedUser;
+
+                if(savedBio) {
+                    const profileBio = document.getElementById("profile-bio");
+                    if(profileBio) profileBio.innerText = savedBio;
+                }
                 if(savedDp) {
-                    document.getElementById("profile-dp-img").src = savedDp;
-                    document.getElementById("story-dp-img").src = savedDp;
+                    const dpImg = document.getElementById("profile-dp-img");
+                    const storyImg = document.getElementById("story-dp-img");
+                    if(dpImg) dpImg.src = savedDp;
+                    if(storyImg) storyImg.src = savedDp;
                 }
             }
             renderFeed();
         });
 
         function handleLogin() {
-            const userVal = document.getElementById("auth-username").value.trim() || "VibeCreator";
+            const usernameInput = document.getElementById("auth-username");
+            const userVal = usernameInput ? usernameInput.value.trim() : "";
+            const finalUser = userVal !== "" ? userVal : "VibeCreator";
+            
             localStorage.setItem("vibenet_token", "jwt_123");
-            localStorage.setItem("vibenet_user", userVal);
-            document.getElementById("auth-screen").style.display = "none";
-            document.getElementById("profile-name").innerText = userVal;
+            localStorage.setItem("vibenet_user", finalUser);
+            
+            const authScreen = document.getElementById("auth-screen");
+            if(authScreen) authScreen.style.display = "none";
+            
+            const profileName = document.getElementById("profile-name");
+            if(profileName) profileName.innerText = finalUser;
+            
             switchTab('home');
         }
 
-        function handleSignup() { handleLogin(); }
-        function logoutUser() { localStorage.clear(); location.reload(); }
+        function handleSignup() { 
+            handleLogin(); 
+        }
+
+        function logoutUser() { 
+            localStorage.clear(); 
+            location.reload(); 
+        }
 
         function updateProfileInfo() {
-            const newName = document.getElementById("input-new-name").value.trim();
-            const newBio = document.getElementById("input-new-bio").value.trim();
+            const newNameInput = document.getElementById("input-new-name");
+            const newBioInput = document.getElementById("input-new-bio");
             const dpInput = document.getElementById("dp-file-input");
+
+            const newName = newNameInput ? newNameInput.value.trim() : "";
+            const newBio = newBioInput ? newBioInput.value.trim() : "";
 
             if(newName) {
                 localStorage.setItem("vibenet_user", newName);
-                document.getElementById("profile-name").innerText = newName;
+                const profileName = document.getElementById("profile-name");
+                if(profileName) profileName.innerText = newName;
             }
             if(newBio) {
                 localStorage.setItem("vibenet_bio", newBio);
-                document.getElementById("profile-bio").innerText = newBio;
+                const profileBio = document.getElementById("profile-bio");
+                if(profileBio) profileBio.innerText = newBio;
             }
-            if(dpInput.files && dpInput.files[0]) {
+            if(dpInput && dpInput.files && dpInput.files[0]) {
                 const dpUrl = URL.createObjectURL(dpInput.files[0]);
                 localStorage.setItem("vibenet_dp", dpUrl);
-                document.getElementById("profile-dp-img").src = dpUrl;
-                document.getElementById("story-dp-img").src = dpUrl;
+                const dpImg = document.getElementById("profile-dp-img");
+                const storyImg = document.getElementById("story-dp-img");
+                if(dpImg) dpImg.src = dpUrl;
+                if(storyImg) storyImg.src = dpUrl;
             }
             alert("Profile updated successfully!");
         }
@@ -279,8 +306,8 @@
                     <div class="px-3 pb-3 space-y-1.5">
                         <div class="flex items-center gap-4 text-lg">
                             <button onclick="toggleLike(${p.id})" class="cursor-pointer ${p.liked ? 'text-pink-500' : 'text-gray-300'}"><i class="${p.liked ? 'fa-solid' : 'fa-regular'} fa-heart"></i></button>
-                            <button onclick="alert('Comments section')" class="text-gray-300 text-base"><i class="fa-regular fa-comment"></i></button>
-                            <button onclick="alert('Post shared link copied!')" class="text-gray-300 text-base"><i class="fa-regular fa-paper-plane"></i></button>
+                            <button onclick="alert('Comments section')" class="text-gray-300 text-base cursor-pointer"><i class="fa-regular fa-comment"></i></button>
+                            <button onclick="alert('Post shared link copied!')" class="text-gray-300 text-base cursor-pointer"><i class="fa-regular fa-paper-plane"></i></button>
                         </div>
                         <p class="text-xs font-bold text-gray-200">${p.likes} likes</p>
                         <p class="text-xs text-gray-300"><span class="font-bold mr-1">${p.username}</span>${p.caption}</p>
@@ -307,32 +334,6 @@
 
         function publishNewPost() {
             const fileInput = document.getElementById("media-file-input");
-            const caption = document.getElementById("post-caption").value;
-            const user = localStorage.getItem("vibenet_user") || "You";
-            if (fileInput.files && fileInput.files[0]) {
-                posts.unshift({
-                    id: Date.now(),
-                    username: user,
-                    verified: true,
-                    mediaUrl: URL.createObjectURL(fileInput.files[0]),
-                    likes: 0,
-                    liked: false,
-                    caption: caption || "New post!"
-                });
-                renderFeed();
-                switchTab('home');
-                document.getElementById("post-caption").value = "";
-                fileInput.value = "";
-            } else {
-                alert("Please select a file!");
-            }
-        }
-
-        function switchTab(tabName) {
-            ['home', 'reels', 'create', 'chat', 'monetization', 'profile'].forEach(t => {
-                const el = document.getElementById(`tab-${t}`);
-                if(el) el.classList.add('hidden');
-            });
-            const active = document.getElementById(`tab-${tabName}`);
-            if(active) active.classList.remove('hidden');
-            c
+            const captionInput = document.getElementById("post-caption");
+            const caption = captionInput ? captionInput.value : "";
+            const user = localStorage.getItem("vibe
