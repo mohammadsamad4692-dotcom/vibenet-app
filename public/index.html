@@ -3,11 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- FORCE NO BROWSER CACHING -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>VibeNet Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background-color: #0b0e14; color: #f3f4f6; font-family: sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #0b0e14; color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, sans-serif; -webkit-tap-highlight-color: transparent; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .glass-nav { background: rgba(18, 24, 38, 0.95); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .badge-verified { color: #38bdf8; }
@@ -29,11 +33,11 @@
                 </div>
 
                 <div class="bg-[#1e293b] p-6 rounded-2xl border border-gray-800 shadow-xl space-y-4">
-                    <input type="text" id="auth-username" placeholder="Username" class="w-full px-4 py-3 bg-[#0f172a] rounded-xl border border-gray-700 text-sm text-white focus:outline-none">
-                    <input type="password" id="auth-password" placeholder="Password" class="w-full px-4 py-3 bg-[#0f172a] rounded-xl border border-gray-700 text-sm text-white focus:outline-none">
+                    <input type="text" id="auth-username" placeholder="Username (e.g. vibNet)" class="w-full px-4 py-3 bg-[#0f172a] rounded-xl border border-gray-700 text-sm text-white focus:outline-none focus:border-pink-500">
+                    <input type="password" id="auth-password" placeholder="Password" class="w-full px-4 py-3 bg-[#0f172a] rounded-xl border border-gray-700 text-sm text-white focus:outline-none focus:border-pink-500">
                     
-                    <button type="button" id="main-login-btn" class="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 font-semibold rounded-xl text-sm text-white cursor-pointer shadow-md active:scale-95 transition">
-                        Log In
+                    <button type="button" id="btn-login-now" class="w-full py-3 bg-gradient-to-r from-pink-500 to-purple-600 font-semibold rounded-xl text-sm text-white cursor-pointer shadow-md active:scale-95 transition">
+                        Log In Now
                     </button>
                 </div>
             </div>
@@ -83,7 +87,7 @@
                                     <span class="font-semibold text-sm text-white">cyber_vibes</span>
                                     <i class="fa-solid fa-circle-check badge-verified text-xs"></i>
                                 </div>
-                                <p id="reel-music-tag" class="text-xs text-gray-200"><i class="fa-solid fa-music mr-1"></i> Original Audio - VibeNet Beat</p>
+                                <p class="text-xs text-gray-200"><i class="fa-solid fa-music mr-1"></i> Starboy - The Weeknd</p>
                             </div>
                         </div>
                     </div>
@@ -101,7 +105,7 @@
                         <input type="file" id="media-file-input" accept="image/*,video/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:bg-pink-500/20 file:text-pink-400 cursor-pointer">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-gray-400 mb-1">Add Background Music / Audio</label>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Select Background Music</label>
                         <select id="music-select" class="w-full bg-[#0f172a] border border-gray-700 rounded-xl p-2.5 text-xs text-white focus:outline-none">
                             <option value="Starboy - The Weeknd">Starboy - The Weeknd</option>
                             <option value="Night Lights & Synth Beats">Night Lights & Synth Beats</option>
@@ -139,12 +143,12 @@
             <section id="tab-monetization" class="hidden p-4 space-y-4">
                 <div class="bg-gradient-to-r from-yellow-500/20 to-pink-500/20 p-4 rounded-2xl border border-yellow-500/30 text-center space-y-3">
                     <i class="fa-solid fa-trophy text-3xl text-yellow-400"></i>
-                    <h3 class="text-sm font-extrabold text-gray-100">Creator Earnings & Monetization</h3>
+                    <h3 class="text-sm font-extrabold text-gray-100">Creator Earnings & Ads</h3>
                     <p class="text-2xl font-black text-green-400">$142.50</p>
                     <div class="text-left bg-[#0f172a]/80 p-3 rounded-xl border border-gray-800 space-y-1.5 text-xs text-gray-300">
-                        <p class="font-bold text-yellow-400"><i class="fa-solid fa-circle-info mr-1"></i> Monetization Rules:</p>
-                        <p>• Monetization tab mein earning real-time update hogi.</p>
-                        <p>• APK version release hone ke baad views & ads se direct earning payout milega.</p>
+                        <p class="font-bold text-yellow-400"><i class="fa-solid fa-circle-info mr-1"></i> Monetization Criteria:</p>
+                        <p>• Earning start hoti hai jab 1,000 Followers & 10,000 Views poore hote hain.</p>
+                        <p>• Ads payout aur verified blue tick badges direct account dashboard se linked rahenge.</p>
                     </div>
                 </div>
             </section>
@@ -164,7 +168,7 @@
 
                 <div class="grid grid-cols-3 gap-2 bg-[#1e293b] p-3 rounded-2xl border border-gray-800 text-center">
                     <div>
-                        <p class="text-sm font-bold text-white">42</p>
+                        <p class="text-sm font-bold text-white">12</p>
                         <p class="text-[10px] text-gray-400">Posts</p>
                     </div>
                     <div>
@@ -195,7 +199,7 @@
 
         </main>
 
-        <!-- BOTTOM NAVIGATION -->
+        <!-- FLOATING BOTTOM NAVIGATION -->
         <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 w-[92%] max-w-sm glass-nav rounded-full px-4 py-2.5 flex items-center justify-between z-40 shadow-2xl">
             <button onclick="switchTab('home')" class="text-pink-500 cursor-pointer"><i class="fa-solid fa-house text-lg"></i></button>
             <button onclick="switchTab('reels')" class="text-gray-400 cursor-pointer"><i class="fa-solid fa-clapperboard text-lg"></i></button>
@@ -220,37 +224,41 @@
             }
         ];
 
-        // Direct Guaranteed Click Listener
-        document.addEventListener("DOMContentLoaded", () => {
-            const loginBtn = document.getElementById("main-login-btn");
-            if(loginBtn) {
-                loginBtn.addEventListener("click", () => {
-                    const input = document.getElementById("auth-username");
-                    const userVal = (input && input.value.trim()) ? input.value.trim() : "vibNet";
+        // Direct Execution on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('btn-login-now');
+            if(btn) {
+                btn.onclick = function() {
+                    const uInput = document.getElementById('auth-username');
+                    const uname = (uInput && uInput.value.trim()) ? uInput.value.trim() : 'vibNet';
                     
                     try {
-                        localStorage.setItem("vibenet_logged", "true");
-                        localStorage.setItem("vibenet_user", userVal);
-                    } catch(e) {}
+                        localStorage.setItem('vibenet_logged', 'true');
+                        localStorage.setItem('vibenet_user', uname);
+                    } catch(e){}
 
-                    const authScreen = document.getElementById("auth-screen");
-                    if(authScreen) authScreen.style.display = "none";
+                    const overlay = document.getElementById('auth-screen');
+                    if(overlay) {
+                        overlay.remove(); // Forcefully remove element from screen
+                    }
                     
-                    const profileName = document.getElementById("profile-name");
-                    if(profileName) profileName.innerText = userVal;
-                    
+                    const pName = document.getElementById('profile-name');
+                    if(pName) pName.innerText = uname;
+
                     switchTab('home');
-                });
+                };
             }
 
-            if(localStorage.getItem("vibenet_logged") === "true") {
-                const authScreen = document.getElementById("auth-screen");
-                if(authScreen) authScreen.style.display = "none";
-                const saved = localStorage.getItem("vibenet_user");
-                if(saved && document.getElementById("profile-name")) {
-                    document.getElementById("profile-name").innerText = saved;
+            // Auto-bypass if already logged in
+            if(localStorage.getItem('vibenet_logged') === 'true') {
+                const overlay = document.getElementById('auth-screen');
+                if(overlay) overlay.remove();
+                const savedUser = localStorage.getItem('vibenet_user');
+                if(savedUser && document.getElementById('profile-name')) {
+                    document.getElementById('profile-name').innerText = savedUser;
                 }
             }
+
             renderFeed();
         });
 
@@ -305,11 +313,4 @@
                             <button onclick="alert('Post shared link copied!')" class="text-gray-300 text-base cursor-pointer"><i class="fa-regular fa-paper-plane"></i></button>
                         </div>
                         <p class="text-xs font-bold text-gray-200">${p.likes} likes</p>
-                        <p class="text-xs text-gray-300"><span class="font-bold mr-1">${p.username}</span>${p.caption}</p>
-                        <p class="text-[11px] text-pink-400 flex items-center gap-1 mt-1"><i class="fa-solid fa-music"></i> ${p.music || 'Original Audio'}</p>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function t
+                        <p class="text-xs text-gray
