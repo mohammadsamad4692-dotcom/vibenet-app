@@ -3,109 +3,228 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 require('dotenv').config();
 
 const User = require('./models/User');
 const Post = require('./models/Post');
 
 const app = express();
-app.use(express.json());
+app.disable('x-powered-by');
+app.use(express.json({ limit: '1mb' }));
 app.use(cors());
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Serve static frontend files from 'public' folder
-app.use(express.static('public'));
-
-// MongoDB Connection
 const MONGO_URI = process.env.MONGO_URI;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 if (!MONGO_URI) {
-    console.error("CRITICAL ERROR: MONGO_URI Environment Variable is missing!");
+  console.error('Missing MONGO_URI environment variable.');
+  process.exit(1);
 }
 
-mongoose.connect(MONGO_URI)
-.then(() => console.log("MongoDB Connected Successfully!"))
-.catch(err => console.error("DB Connection Error:", err.message));
+if (!JWT_SECRET || JWT_SECRET.length < 32) {
+  console.error('JWT_SECRET must be at least 32 characters.');
+  process.exit(1);
+}
 
-// --- AUTH ROUTES ---
+function authenticateToken(req, res, next) {
+  const header = req.headers.authorization || '';
+  const [scheme, token] = header.split(' ');
 
-// Signup Route
+  if (scheme !== 'Bearer' || !token) {
+    return res.status(401).json({ error: 'Login required.' });
+  }
+
+  try {
+    req.auth = jwt.verify(token, JWT_SECRET, {
+      algorithms: ['HS256']
+    });
+    next();
+  } catch {
+    return res.status(401).json({
+      error: 'Invalid or expired token. Please log in again.'
+    });
+  }
+}
+
+// Signup
 app.post('/api/signup', async (req, res) => {
-    try {
-        const { username, password } = req.body;
-        if (!username || !password) {
-            return res.status(400).json({ error: "Username and password are required!" });
-        }
+  try {
+    const username = typeof req.body.username === 'string'
+      ? req.body.username.trim()
+      : '';
+    const password = req.body.password;
 
-        const existingUser = await User.findOne({ username });
-        if (existingUser) {
-            return res.status(400).json({ error: "Username already taken!" });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ username, password: hashedPassword });
-        await newUser.save();
-
-        res.json({ message: "User registered successfully!" });
-    } catch (err) {
-        console.error("Signup Error:", err);
-        res.status(500).json({ error: "Server error during signup", details: err.message });
+    if (!/^[a-zA-Z0-9_]{3,30}$/.test(username)) {
+      return res.status(400).json({
+        error: 'Username must be 3-30 letters, numbers or underscores.'
+      });
     }
+
+    if (typeof password !== 'string' ||
+        password.length < 8 || password.length > 128) {
+      return res.status(400).json({
+        error: 'Password must be 8-128 characters.'
+      });
+    }
+
+    const existing = await User.findOne({ username });
+    if (existing) {
+      return res.status(409).json({ error: 'Username already taken.' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+    await User.create({ username, password: hashedPassword });
+
+    return res.status(201).json({
+      message: 'Account created. Please log in.'
+    });
+  } catch (err) {
+    if (err.code === 11000) {
+      return res.status(409).json({ error: 'Username already taken.' });
+    }
+    console.error('Signup error:', err.message);
+    return res.status(500).json({ error: 'Could not create account.' });
+  }
 });
 
-// Login Route
+// Login
 app.post('/api/login', async (req, res) => {
-    try {
-        const { username, password } = req.body;
-        const user = await User.findOne({ username });
-        if (!user) return res.status(400).json({ error: "User not found!" });
+  try {
+    const username = typeof req.body.username === 'string'
+      ? req.body.username.trim()
+      : '';
+    const password = req.body.password;
 
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ error: "Invalid password!" });
-
-        const token = jwt.sign(
-            { id: user._id, username: user.username }, 
-            process.env.JWT_SECRET || 'vibenet_secret_key', 
-            { expiresIn: '7d' }
-        );
-        res.json({ token, username: user.username, userId: user._id, message: "Logged in successfully!" });
-    } catch (err) {
-        console.error("Login Error:", err);
-        res.status(500).json({ error: "Server error during login", details: err.message });
+    if (!username || typeof password !== 'string') {
+      return res.status(400).json({
+        error: 'Username and password are required.'
+      });
     }
+
+    const user = await User.findOne({ username });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({
+        error: 'Invalid username or password.'
+      });
+    }
+
+    const token = jwt.sign(
+      { id: user._id.toString() },
+      JWT_SECRET,
+      { expiresIn: '7d', algorithm: 'HS256' }
+    );
+
+    return res.json({
+      token,
+      username: user.username,
+      userId: user._id.toString(),
+      message: 'Logged in successfully.'
+    });
+  } catch (err) {
+    console.error('Login error:', err.message);
+    return res.status(500).json({ error: 'Login failed.' });
+  }
 });
 
-// --- POST ROUTES ---
+// Create post - requires a valid login token
+app.post('/api/posts', authenticateToken, async (req, res) => {
+  try {
+    const { mediaUrl, caption = '' } = req.body;
 
-// Create Post
-app.post('/api/posts', async (req, res) => {
-    try {
-        const { userId, username, mediaUrl, caption } = req.body;
-        if (!userId || !mediaUrl) {
-            return res.status(400).json({ error: "User ID and Media are required!" });
-        }
-
-        const newPost = new Post({ userId, username, mediaUrl, caption });
-        await newPost.save();
-        res.json({ message: "Post uploaded successfully!", post: newPost });
-    } catch (err) {
-        console.error("Post Error:", err);
-        res.status(500).json({ error: "Error uploading post", details: err.message });
+    if (typeof mediaUrl !== 'string' ||
+        !mediaUrl.trim() || mediaUrl.length > 2048) {
+      return res.status(400).json({ error: 'Valid mediaUrl is required.' });
     }
+
+    if (typeof caption !== 'string' || caption.length > 2200) {
+      return res.status(400).json({ error: 'Invalid caption.' });
+    }
+
+    const user = await User.findById(req.auth.id).select('username');
+    if (!user) {
+      return res.status(401).json({
+        error: 'Account not found. Please log in again.'
+      });
+    }
+
+    const post = await Post.create({
+      userId: user._id,
+      username: user.username,
+      mediaUrl: mediaUrl.trim(),
+      caption: caption.trim()
+    });
+
+    return res.status(201).json({
+      message: 'Post created successfully.',
+      post
+    });
+  } catch (err) {
+    console.error('Create post error:', err.message);
+    return res.status(500).json({ error: 'Could not create post.' });
+  }
 });
 
-// Fetch All Posts
+// Fetch recent posts - public
 app.get('/api/posts', async (req, res) => {
-    try {
-        const posts = await Post.find().sort({ createdAt: -1 });
-        res.json(posts);
-    } catch (err) {
-        console.error("Fetch Posts Error:", err);
-        res.status(500).json({ error: "Error fetching posts", details: err.message });
+  try {
+    const posts = await Post.find()
+      .sort({ createdAt: -1 })
+      .limit(100)
+      .lean();
+
+    return res.json(posts);
+  } catch (err) {
+    console.error('Fetch posts error:', err.message);
+    return res.status(500).json({ error: 'Could not fetch posts.' });
+  }
+});
+
+// Delete only your own post
+app.delete('/api/posts/:id', authenticateToken, async (req, res) => {
+  try {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(400).json({ error: 'Invalid post ID.' });
     }
+
+    const post = await Post.findOne({
+      _id: req.params.id,
+      userId: req.auth.id
+    });
+
+    if (!post) {
+      return res.status(404).json({
+        error: 'Post not found or you do not own it.'
+      });
+    }
+
+    await post.deleteOne();
+    return res.json({ message: 'Post deleted successfully.' });
+  } catch (err) {
+    console.error('Delete post error:', err.message);
+    return res.status(500).json({ error: 'Could not delete post.' });
+  }
+});
+
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: mongoose.connection.readyState === 1 ? 'ok' : 'not_ready'
+  });
 });
 
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
-          
+
+mongoose.connect(MONGO_URI)
+  .then(() => {
+    console.log('MongoDB connected.');
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server listening on port ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Database connection failed:', err.message);
+    process.exit(1);
+  });
+        
