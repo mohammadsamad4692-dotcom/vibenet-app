@@ -9,6 +9,61 @@
     <meta http-equiv="Expires" content="0">
     <title>VibeNet Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const oldButton = document.getElementById('btn-login-now');
+  if (!oldButton) return;
+
+  // Purane demo-login click handler ko hatao
+  const button = oldButton.cloneNode(true);
+  oldButton.replaceWith(button);
+
+  button.addEventListener('click', async () => {
+    const username = document.getElementById('auth-username').value.trim();
+    const password = document.getElementById('auth-password').value;
+
+    if (!username || !password) {
+      alert('Username aur password dono bharo.');
+      return;
+    }
+
+    button.disabled = true;
+    button.textContent = 'Logging in...';
+
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.token) {
+        throw new Error(data.error || data.message || 'Login failed');
+      }
+
+      localStorage.setItem('vibenet_token', data.token);
+      localStorage.setItem('vibenet_user', data.username || username);
+      localStorage.setItem('vibenet_userId', data.userId || '');
+
+      // Purane demo-login flag ko hatao
+      localStorage.removeItem('vibenet_logged');
+
+      alert('Login successful. Page reload ho raha hai.');
+      location.reload();
+    } catch (error) {
+      alert('Login nahi hua: ' + error.message);
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Log In Now';
+    }
+  });
+});
+</script>
+</body>
+</html>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background-color: #0b0e14; color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, sans-serif; -webkit-tap-highlight-color: transparent; }
