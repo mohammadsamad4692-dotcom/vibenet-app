@@ -9,21 +9,27 @@
     <meta http-equiv="Expires" content="0">
     <title>VibeNet Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-<script>
+    <script>
 document.addEventListener('DOMContentLoaded', () => {
   const oldButton = document.getElementById('btn-login-now');
-  if (!oldButton) return;
+  const usernameInput = document.getElementById('auth-username');
+  const passwordInput = document.getElementById('auth-password');
 
-  // Purane demo-login click handler ko hatao
+  if (!oldButton || !usernameInput || !passwordInput) {
+    console.error('VibeNet login fields not found');
+    return;
+  }
+
+  // Purana login click handler replace karo
   const button = oldButton.cloneNode(true);
   oldButton.replaceWith(button);
 
   button.addEventListener('click', async () => {
-    const username = document.getElementById('auth-username').value.trim();
-    const password = document.getElementById('auth-password').value;
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value;
 
     if (!username || !password) {
-      alert('Username aur password dono bharo.');
+      alert('Username aur password bharo.');
       return;
     }
 
@@ -45,13 +51,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
       localStorage.setItem('vibenet_token', data.token);
       localStorage.setItem('vibenet_user', data.username || username);
-      localStorage.setItem('vibenet_userId', data.userId || '');
 
-      // Purane demo-login flag ko hatao
-      localStorage.removeItem('vibenet_logged');
+      if (data.userId) {
+        localStorage.setItem('vibenet_userId', data.userId);
+      }
 
-      alert('Login successful. Page reload ho raha hai.');
-      location.reload();
+      localStorage.setItem('vibenet_logged', 'true');
+
+      // Login screen hide karo; page reload ki zaroorat nahi
+      const authScreen = document.getElementById('auth-screen');
+      if (authScreen) authScreen.remove();
+
+      alert('Login successful!');
     } catch (error) {
       alert('Login nahi hua: ' + error.message);
     } finally {
@@ -60,9 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-</script>
-</body>
-</html>
+    </script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
